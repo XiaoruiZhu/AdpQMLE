@@ -17,4 +17,4 @@ install("AdpQMLE")
 library(AdpQMLE) # uses the development version
 dev_mode()
 # Fresh R session
-library(mypackage) # uses the released package you've installed previously
+library(AdpQMLE) # uses the released package you've installed previously

@@ -1,15 +1,18 @@
-##' .. content for \description{} (Function to generate GARCH time series with t-students distribution innovations) ..
+##' Function to generate GARCH time series with t-students distribution innovations
 ##'
-##' .. content for \details{} ..
+##' This function is used to generate GARCH time series with t-students distribution innovations. This kind of innovations will better perform the heavy-tailed characteristics of financial data. 
+##' 
 ##' @title T.GARCH
+##'
 ##' @param alpha The vector include the incept and the parameters of autoregression part
 ##' @param beta The vector include the parameters of conditional variancea
 ##' @param n The lenght of time series
 ##' @param rnd The distribution of error(innovation) of GARCH model
 ##' @param df.t The df of student's t distribution. df.t>0 continuous parameter 
 ##' @param ntrans burn-in size, i.e. number of initial simulated data to be discarded
+##'
 ##' @author Xiaorui.Zhu
-GARCH_t=function (alpha, beta, n = 100, rnd=rt, df.t,ntrans = 100)
+GARCH_t=function (alpha, beta, n = 100, rnd=rt, df.t, ntrans = 100)
 {
   if (!missing(beta))
     p = length(beta)
