@@ -18,3 +18,22 @@ library(AdpQMLE) # uses the development version
 dev_mode()
 # Fresh R session
 library(AdpQMLE) # uses the released package you've installed previously
+
+instrument <- "MOMO"
+url <- paste("http://www.google.com/finance/getprices?i=60&p=20d&f=d,o,h,l,c,v&df=cpct&q=", instrument, sep = "")
+url
+destfile <- tempfile()
+destfile
+method <- "auto"
+if (is.null(method)) {
+  method <- getOption("download.file.method")
+  if (is.null(method)) 
+    method <- "auto"
+}
+quiet <- FALSE
+status <- tryCatch(download.file(url, destfile, method = method, 
+                                 quiet = quiet), error = identity)
+status
+!inherits(status, "error")
+x <- read.table(destfile, header = TRUE, sep = ",", as.is = TRUE, 
+                fill = TRUE)
