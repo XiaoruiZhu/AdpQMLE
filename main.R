@@ -2,11 +2,53 @@
 setwd('Y:/PH.D/Fields/R_packages/AdpQMLE/AdpQMLE') # set the working path as AdpQMLE
 dir() # list all the files and folders in this path
 
-plot(GARCH_t(alpha=c(0.1,0.2),beta=0.5,n=100,df.t=2)$xt,type='l')
+##########################
+# Test for GARCH_t function #
+xx <- GARCH_t(alpha = c(0.1, 0.2), beta = 0.5, n = 100, rnd = "rt", df.t = 2.1)
+plot(xx, type = "l")
+kurtosis(xx)
 
+##########################
 
+##########################
+# Test for MyMLE function #
+n <- 1100
+a <- c(0.1, 0.5)
+b <- c(0.2) # GARCH(1,1) coefficients
+e <- rnorm(n)
+x <- double(n)
+sig2t <- x
+x[1:1] <- rnorm(1, sd = sqrt(a[1]/(1.0-a[2]-b[1])))
+x[1]
+sig2t[1] <- a[1]/(1.0-a[2]-b[1])
+sig2t[1]
+for(i in 2:n) {
+  # Generate GARCH(1,1) process
+  sig2t[i] = sum(a * c(1, x[i-1]^2)) + sum(b[1] * sig2t[i - 1])
+  x[i] = e[i]*sqrt(sig2t[i])
+}
 
-0##########################
+x <- ts(x[101:1100])
+x
+
+plot(x, type = "l")
+x.arch <- garch(x, order = c(0,2)) # Fit ARCH(2)
+####
+para <- MyMLE(x)
+para
+
+######################################### To be continue ###############
+
+####
+summary(x.arch) # Diagnostic tests
+plot(x.arch)
+data(EuStockMarkets)
+dax <- diff(log(EuStockMarkets))[,"DAX"]
+dax.garch <- garch(dax) # Fit a GARCH(1,1) to DAX returns
+summary(dax.garch) # ARCH effects are filtered. However,
+plot(dax.garch) # conditional normality seems to be violated
+##########################
+
 library(xts)
 xxx <- google.intraday.data("AAPL", freq = 60, period = "1d")
 xxx
