@@ -20,7 +20,7 @@
 #' @export
 #'
 #' @examples
-getdata=function(instrument, start, end, provider, savename){
+getHighFreqData=function(instrument, start, end, provider, savename){
   if (missing(start)) 
     start <- "1991-01-02"
   if (missing(end)) 
