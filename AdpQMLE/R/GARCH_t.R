@@ -8,9 +8,10 @@
 ##' @param beta The vector include the parameters of conditional variance, which is GARCH terms with order p.
 ##' @param n The lenght of time series
 ##' @param rnd The distribution of error(innovation) of GARCH model
-##' @param df.t The df of student's t distribution. df.t>0 continuous parameter 
+##' @param df.t The df of student's t distribution. df.t>2 continuous parameter 
 ##' @param ntrans burn-in size, i.e. number of initial simulated data to be discarded
-##'
+##' @return 
+##' @export
 ##' @author Xiaorui.Zhu
 GARCH_t <- function (alpha, beta, n = 100, rnd = c("rt", "rnorm"), df.t, ntrans = 100)
 {
