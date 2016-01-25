@@ -1,6 +1,15 @@
-# this is the function which can be used to estimate parameters of garch(1,1)
-# h is the length of time-series
-# x is the time-series
+
+#' This is the function which can be used to estimate parameters of garch(1,1)
+#' 
+#' Adaptive Quasi Maximum Likelihood Estimation
+#' 
+#' @param h 
+#' @param x 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 A_tQMLE=function(h,x){
   # 生成要用的序列，t error，parameter=,以及估计参数矩阵，best df矩阵
   Estm=matrix(NA,11,3)
