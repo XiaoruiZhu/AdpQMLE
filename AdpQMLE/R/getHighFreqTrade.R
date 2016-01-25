@@ -1,5 +1,4 @@
-#-------------抓取股票数据-------
-#JPM是股指名称，自己上yahoo查
+# Get Data function.
 # JPM <- as.xts(get.hist.quote("JPM",start="2000-01-02",
 #                              provider ="yahoo",
 #                              quote=c("Open", "High", "Low", "Close","Volume","AdjClose")))
