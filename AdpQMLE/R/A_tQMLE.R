@@ -29,7 +29,7 @@ A_tQMLE=function(h,x){
   # 接下来用理论的rt残差与之对比看yita大概走向
   Bdf.t[2]=Qt.df[which(min(abs(samplesYITA-1))==abs(samplesYITA-1))]
   # 第二步开始估计，用的是tQMLE，其中t分布用的参数时第一步估计出来的Bestdf.t
-  source('EstmBestdf.R')
+  # source('EstmBestdf.R')
   for (j in 2:11){
     EstmBdf=EstmBestdf(h,x,bestdf=Bdf.t[j])
     Estm[j,]=EstmBdf$Est
