@@ -1,7 +1,7 @@
 #' Simple MLE based on normal residua assumption.
 #' 
 #'
-#' @param x is time series data. 
+#' @param x is time series data. It is need to be revise.
 #'
 #' @return is the estimated parameters of GARCH(1,1)
 #' @export
