@@ -1,10 +1,9 @@
-#' Title
+#' com.residue is a function used to calculate the residue of GARCH model so that the futher adaptive procedure can be move forward.  
 #'
-#' @param para 
-#' @param x 
+#' @param para is the parameters of GARCH model. Here only consider the GARCH(1,1), so there are three parameters. But this whole stuff should be revised for general models.
+#' @param x is the time series. It could be daily stock returns, minutely stock returns, or monthly exchange rate.  
 #'
-#' @return
-#' @export
+#' @return  is the residues between the predicted time series and the original time series. 
 #'
 #' @examples
 com.residue=function(para,x){
