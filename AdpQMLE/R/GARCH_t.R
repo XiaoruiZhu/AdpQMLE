@@ -7,12 +7,12 @@
 ##' @param alpha The vector include the intercept and the parameters of autoregression part, which is ARCH terms (q).
 ##' @param beta The vector include the parameters of conditional variance, which is GARCH terms with order p.
 ##' @param n The lenght of time series
-##' @param rnd The distribution of error(innovation) of GARCH model
+##' @param rnd The distribution of error(innovation) of GARCH model. Right now we only consider student's t and normal distributions. Generalized Gaussian and Pearson Type III distributions will be included.  
 ##' @param df.t The df of student's t distribution. df.t>2 continuous parameter 
 ##' @param ntrans burn-in size, i.e. number of initial simulated data to be discarded
 ##' @return 
 ##' @export
-##' @author Xiaorui.Zhu
+##' @author Xiaorui(Jeremy) Zhu
 GARCH_t <- function (alpha, beta, n = 100, rnd = c("rt", "rnorm"), df.t, ntrans = 100)
 {
   # alpha includ intercept alpha_0 and ARCH terms (q).
