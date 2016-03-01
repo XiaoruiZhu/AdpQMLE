@@ -1,4 +1,3 @@
-
 #' This is the function which can be used to estimate parameters of garch(1,1)
 #' 
 #' Adaptive Quasi Maximum Likelihood Estimation
@@ -11,13 +10,19 @@
 #'
 #' @examples
 A_tQMLE=function(h,x){
-  # 生成要用的序列，t error，parameter=,以及估计参数矩阵，best df矩阵
+  # This part need to be changed and revised for efficient calculation.
   Estm=matrix(NA,11,3)
   Bdf.t=rep(NA,11)
-  # 第一步！！！！！
+  # First step
+  # but it's demand caution to make this whole adaptive-QMLE straigtforward. 
   Estm[1,]=MyMLE(h,x)$mle.N
-  e.t=com.e(Estm[1,],x)
-  # 计算MLE得出的残差e.t，这个是需要来寻找最优f的参数的，yita=1作为边界！
+  e.t=com.residue(Estm[1,],x)
+  # Second step!!
+  # Calculation of residues. The function is com.residue()
+  # The scale parameter yita_f is the boundary. Equal to 1 is the condition.  
+  ############## here is a big issue ###################
+  ############## how to make this step more efficient #######
+  ############## Think over the gradient descent ############
   Qt.df=c(2.2,2.4,2.6,2.8,3,3.3,3.5,3.8,4,4.3,4.5,4.8,5,5.5,6,7,8,9,10,11,15,20,30,50,60,80)
   ndf=length(Qt.df)
   k=rep(NA,1)
