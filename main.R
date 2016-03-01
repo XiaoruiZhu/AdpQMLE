@@ -1,8 +1,8 @@
 
 setwd('Y:/PH.D/Fields/R_packages/AdpQMLE/AdpQMLE') # set the working path as AdpQMLE
 dir() # list all the files and folders in this path
-
-##########################
+######## Let's wrep up whole stuff from the bottom up! ##############
+############ 1. The GARCH generating function. ##############
 # Test for GARCH_t function #
 xx <- GARCH_t(alpha = c(0.1, 0.2), beta = 0.5, n = 100, rnd = "rt", df.t = 2.1)
 plot(xx, type = "l")
