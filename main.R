@@ -30,17 +30,18 @@ for(i in 2:n) {
 }
 
 x <- ts(x[101:1100])
-x
 
 plot(x, type = "l")
 library(tseries)
-x.arch <- garch(x, order = c(0,2)) # Fit ARCH(2)
-
-####
+x.arch <- garch(x, order = c(1,1)) # Fit GARCH(1,1)
 para <- MyMLE(x)
 para
+xx.arch <- garch(xx, order = c(1,1)) # Fit GARCH(1,1)
+para2 <- MyMLE(xx)
+para2
 
 ############# 3. com.residue function writing and testing ###################
+
 ################################
 
 ############# 4. MytQMLE function writing and testing ###################
