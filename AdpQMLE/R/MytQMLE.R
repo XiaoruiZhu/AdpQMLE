@@ -1,5 +1,14 @@
-# sig2 in the formula is the sig^2!!!!!!!!!!!!!!pay attention.
-MytQMLE=function(h,x,dfest){
+#' MytQMLE is a function used to estimate parameters of GARCH(1,1) with student's t innovation.
+#'
+#' @param x is the time series that was hypothesized as GARCH(1,1) model. 
+#' @param dfest is specified degree of freedom of innovation. 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+MytQMLE=function(x,dfest){
+  # sig2 in the formula is the sig^2!!!!!!!!!!!!!!pay attention.
   # t分布新息的GARCH(1,1) likelihood function
   df=dfest
   likt<-function(x){

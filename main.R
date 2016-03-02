@@ -39,6 +39,11 @@ para
 xx.arch <- garch(xx, order = c(1,1)) # Fit GARCH(1,1)
 para2 <- MyMLE(xx)
 para2
+para3 <- MytQMLE(xx, 2.3)
+para3
+
+############# change myMLE for GARCH(p,q) ###############
+
 
 ############# 3. com.residue function writing and testing ###################
 
