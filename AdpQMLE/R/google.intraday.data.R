@@ -1,8 +1,8 @@
 #' Title
 #'
 #' @param symbol is the stock symbol. This quote should correspond with Yahoo list. Symbols can be found here: http://www.marketwatch.com/tools/industry/stocklist.asp?bcind_ind=9537&bcind_period=3mo
-#' @param freq is the interval of time. The unit of it is second. The minimal interval is 60 seconds. 
-#' @param period is the time period.
+#' @param freq is the interval of time. The unit of it is second. The minimal interval is 60 seconds. Like "60s". Please input numeric. 
+#' @param period is the time period. The unit is day, "d". Please input numeric. 
 #' @importFrom xts xts
 #' @return Return data include data untill now.
 #' @export
@@ -10,7 +10,7 @@
 #' @examples
 google.intraday.data <- function(symbol, freq, period) {
   base.url <- "http://www.google.com/finance/getprices?"
-  options.url <- paste("i=",freq,"&p=",period,"&f=d,o,h,l,c,v&df=cpct&q=", symbol, sep="")
+  options.url <- paste("i=",freq,"&p=",period,"d&f=d,o,h,l,c,v&df=cpct&q=", symbol, sep="")
   full.url <- paste(base.url, options.url, sep="")
   
   data <- read.csv(full.url, skip=7, header=F, stringsAsFactors=F)
