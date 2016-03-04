@@ -58,7 +58,21 @@ para3
 ############# 6. YITAtQMLE function writing and testing ###################
 ################################
 
-################################
+############# 7. google.intraday.data testing ###################
+library('xts')
+AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =2)
+head(AMZN)
+length(AMZN[,1])/(6.5*60)
+
+# AMZN$minute_updown <- AMZN$Close -AMZN$Open
+lagClose <- lag(AMZN$Close, k = 1)
+temp <- ifelse((lagClose - AMZN$Open)<=0, 1, 0)
+AMZN$updown_tplus1 <- lag(temp, k = -1) 
+head(updown_tplus1);head(AMZN)
+write.csv(AMZN, file = "AMZN.csv") 
+
+# split(AMZN, f = 'days')
+
 ################################
 
 ################################
