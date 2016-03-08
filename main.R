@@ -60,15 +60,29 @@ para3
 
 ############# 7. google.intraday.data testing ###################
 library('xts')
-AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =2)
+AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =12)
 head(AMZN)
 length(AMZN[,1])/(6.5*60)
-
+length(AMZN[,1])
 # AMZN$minute_updown <- AMZN$Close -AMZN$Open
+AMZN$within_minuteR <- log(AMZN$Close/AMZN$Open)
 lagClose <- lag(AMZN$Close, k = 1)
-temp <- ifelse((lagClose - AMZN$Open)<=0, 1, 0)
+head(lagClose)
+AMZN$next_minute_return <- log(AMZN$Open/lagClose) 
+
+temp <- rep(0, length(AMZN[,1]))
+
+temp[(lagClose - AMZN$Open)<0] <- 3
+temp[(lagClose - AMZN$Open)==0] <- 2
+temp[(lagClose - AMZN$Open)>0] <- 1
+head(temp)
+
 AMZN$updown_tplus1 <- lag(temp, k = -1) 
-head(updown_tplus1);head(AMZN)
+head(AMZN)
+summary(AMZN$next_minute_return)
+hist(AMZN$next_minute_return, breaks = 20, xlim = c(-0.005, 0.005))
+AMZN <- AMZN[-1]
+length(AMZN[,1])
 write.csv(AMZN, file = "AMZN.csv") 
 
 # split(AMZN, f = 'days')
