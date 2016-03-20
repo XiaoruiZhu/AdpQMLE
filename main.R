@@ -12,7 +12,7 @@ kurtosis(xx)
 ###########     OK, END      ###############
 
 ########### 2. The basic MLE method testing. ###############
-# Test for MyMLE function #
+# Test for MLE function #
 n <- 1100
 a <- c(0.1, 0.5)
 b <- c(0.2) # GARCH(1,1) coefficients
@@ -29,13 +29,16 @@ for(i in 2:n) {
   x[i] = e[i]*sqrt(sig2t[i])
 }
 
-x <- ts(x[101:1100])
+# x <- ts(x[101:1100])
 
 plot(x, type = "l")
 library(tseries)
 x.arch <- garch(x, order = c(1,1)) # Fit GARCH(1,1)
-para <- MyMLE(x)
-para
+est1 <- MLE(series = x, LogLFunc = LogL_GARCH_Norm)
+est1
+est2 <- tQMLE(series = x, logLFunc = LogL_GARCH_t)
+
+
 xx.arch <- garch(xx, order = c(1,1)) # Fit GARCH(1,1)
 para2 <- MyMLE(xx)
 para2
