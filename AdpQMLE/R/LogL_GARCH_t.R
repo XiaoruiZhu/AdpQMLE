@@ -1,6 +1,7 @@
 #' The Log-likelihood function of GARCH model. Here is the GARCH(1,1). Need to be changed. 
 #'
 #' @param series The time series that need to be fitted. 
+#' @param df The specified degree of freedome of student's t innovation.
 #'
 #' @param 
 #'
@@ -8,8 +9,8 @@
 #' @export
 #'
 #' @examples
-LogL_GARCH_t <- function(series){
-  tL=function(para){
+LogL_GARCH_t <- function(series,df){
+  GARCH_e_t=function(para){
     n=length(series)
     sig2=numeric(n);tem1=numeric(1);tem2=numeric(1)
     w=para[1]
@@ -23,11 +24,11 @@ LogL_GARCH_t <- function(series){
     }
     if (c(w,alpha,beta) > rep(0,3) && (alpha+beta) < 1 && sig2>=rep(0,n))  
     {
-      tQMLE.e <- seires/(sqrt(sig2))
+      tQMLE.e <- series/(sqrt(sig2))
       f=(gamma((df+1)/2)/(pi*df)^0.5/gamma(df/2))*(1+tQMLE.e^2/(df))^(-(df+1)/2)
-      sum(log(sig2)-2*log(f))
+      return(sum(log(sig2)-2*log(f)))
     }
-    else Inf
+    else return(Inf)
   }
-  tL
+  GARCH_e_t
 }
