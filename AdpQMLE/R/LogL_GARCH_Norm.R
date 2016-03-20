@@ -12,9 +12,9 @@ LogL_GARCH_Norm <- function(series){
   GARCH_Norm <- function(para){
     n <- length(series)
     sig2 <- numeric(n); tem1 <- numeric(1); tem2 <- numeric(1)
-    w <- par[1]
-    alpha <- par[2]
-    beta <- par[3]
+    w <- para[1]
+    alpha <- para[2]
+    beta <- para[3]
     sig2[1] <- w/(1.0-alpha-beta)
     for (t in 2:n){
       tem2 <- beta * (tem2+tem1)
