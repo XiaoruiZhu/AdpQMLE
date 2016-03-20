@@ -1,4 +1,6 @@
-#' Title
+#' google.intraday.data
+#' 
+#' This is a function used get Google minutely trading data of stocks.
 #'
 #' @param symbol is the stock symbol. This quote should correspond with Yahoo list. Symbols can be found here: http://www.marketwatch.com/tools/industry/stocklist.asp?bcind_ind=9537&bcind_period=3mo
 #' @param freq is the interval of time. The unit of it is second. The minimal interval is 60 seconds. Like "60s". Please input numeric. 

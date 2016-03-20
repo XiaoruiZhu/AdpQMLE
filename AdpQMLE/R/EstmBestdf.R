@@ -1,4 +1,14 @@
-# 先用已得的Bestdf.t来tQMLE估计参数，用参数计算e，在计算yita一堆，找到最接近1的Bestdf.t
+#' Estimation of best degree of freedom
+#'
+#' Use bestdf.t to estimate df, then calculate residual and scale parameter yita_f, so that figure out best df with yita_f=1.
+#' @param h 
+#' @param t 
+#' @param bestdf 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 EstmBestdf=function(h,t,bestdf){
   Nest=MytQMLE(h,t,dfest=bestdf)$qmle.N
   e.t=com.e(Nest,x=t)
