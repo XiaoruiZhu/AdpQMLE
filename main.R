@@ -68,10 +68,7 @@ hist(data$y, freq = FALSE, breaks = 50, xlab = expression(y[i]), main = "")
 plot(data$x, data$y)
 test <- lm(data$y~data$x)
 test
-y <- as.matrix(data$y)
-y
-X <- as.matrix(data$x)
-X
+y <- as.matrix(data$y); X <- as.matrix(data$x)
 myMLE <- MLE(y, X, LogLFunc = "LogL_Linear_Norm")
 myMLE
 
