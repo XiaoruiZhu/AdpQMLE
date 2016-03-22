@@ -8,8 +8,14 @@
 #' @export
 #'
 #' @examples
-MLE <- function(series, LogLFunc){
+MLE <- function(y, X, LogLFunc = c("LogL_GARCH_Norm", "LogL_Linear_Norm")){
   ## normal distribution innovation likelihood
-  MLE.N <- nlminb(c(0.01,0.01,0.01), LogLFunc(series), lower=c(0,0,0), upper=c(Inf,1,1))
-  list(MLE.N = MLE.N$par)
+  if (missing(X) || LogLFunc == "LogL_GARCH_Norm"){
+    LogLFunc <- LogL_GARCH_Norm
+    MLE.N <- nlminb(c(0.01,0.01,0.01), LogLFunc(y), lower=c(0,0,0), upper=c(Inf,1,1))
+    list(MLE.N = MLE.N$par)
+  } else if (!missing(X) && LogLFunc == "LogL_Linear_Norm") {
+    LogLFunc <- LogL_Linear_Norm
+    MLE.N <- nlminb(c(0.01,0.01), LogLFunc(X, y))
+  }
 }
