@@ -2,7 +2,7 @@
 ##'
 ##' This function is used to generate GARCH time series with t-students distribution innovations. This kind of innovations will better perform the heavy-tailed characteristics of financial data. 
 ##' 
-##' @title T.GARCH
+##' @title GARCH.t
 ##'
 ##' @param alpha The vector include the intercept and the parameters of autoregression part, which is ARCH terms (q).
 ##' @param beta The vector include the parameters of conditional variance, which is GARCH terms with order p.

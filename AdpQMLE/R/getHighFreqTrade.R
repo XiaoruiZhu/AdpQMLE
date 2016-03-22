@@ -1,11 +1,6 @@
-# Get Data function.
-# JPM <- as.xts(get.hist.quote("JPM",start="2000-01-02",
-#                              provider ="yahoo",
-#                              quote=c("Open", "High", "Low", "Close","Volume","AdjClose")))
-# write.csv(JPM,file="Y:/DATA/JPM2013.csv")
-# length(JPM)
-
-#' Title
+#' getHighFreqData
+#'
+#' This function is used to download high frequent data of stock. The source is Google.
 #'
 #' @param start is the start date of your period with the format "YYYY-MM-DD". Default start date is "1991-01-02".
 #' @param end is the end date of your period with the format "YYYY-MM-DD". The default end date is the day before the today in your system. 

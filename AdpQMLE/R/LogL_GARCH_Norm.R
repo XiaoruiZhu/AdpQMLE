@@ -1,4 +1,6 @@
-#' The Log-likelihood function of GARCH model. Here is the GARCH(1,1). Need to be changed. 
+#' The Log-likelihood function of GARCH model. 
+#'
+#' Here is the GARCH(1,1). Need to be changed. 
 #'
 #' @param series The time series that need to be fitted. 
 #'
