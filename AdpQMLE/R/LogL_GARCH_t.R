@@ -8,7 +8,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 LogL_GARCH_t <- function(series,df){
   GARCH_e_t=function(para){
     n=length(series)
