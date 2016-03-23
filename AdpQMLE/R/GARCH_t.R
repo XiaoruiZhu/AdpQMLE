@@ -10,7 +10,7 @@
 ##' @param rnd The distribution of error(innovation) of GARCH model. Right now we only consider student's t and normal distributions. Generalized Gaussian and Pearson Type III distributions will be included.  
 ##' @param df.t The df of student's t distribution. df.t>2 continuous parameter 
 ##' @param ntrans burn-in size, i.e. number of initial simulated data to be discarded
-##' @return 
+##' @return A list includes time-series "x" and conditional sigma square "sig.sq". 
 ##' @export
 ##' @author Xiaorui(Jeremy) Zhu
 GARCH_t <- function (alpha, beta, n = 100, rnd = c("rt", "rnorm"), df.t, ntrans = 100)
@@ -60,5 +60,5 @@ GARCH_t <- function (alpha, beta, n = 100, rnd = c("rt", "rnorm"), df.t, ntrans 
     }
   }
 #   return(invisible(x[(ntrans + 1):total.n]))
-  return(invisible(x[(ntrans + 1):total.n]))
+  list(x = invisible(x[(ntrans + 1):total.n]), sig.sq=sig2t[(ntrans + 1):total.n])
 }

@@ -6,7 +6,9 @@ dir() # list all the files and folders in this path
 ############ 1. The GARCH generating function. ##############
 # Test for GARCH_t function #
 xx <- GARCH_t(alpha = c(0.1, 0.2), beta = 0.5, n = 200, rnd = "rt", df.t = 2.3)
-plot(xx, type = "l")
+head(xx)
+plot(xx$x, type = "l")
+plot(xx$sig.sq, type = "l")
 library(timeDate)
 kurtosis(xx)
 ###########     OK, END      ###############
