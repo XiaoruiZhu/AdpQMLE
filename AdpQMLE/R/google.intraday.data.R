@@ -1,4 +1,4 @@
-#' google.intraday.data
+#' google.intraday.data is used to download Google minutely trading date of stocks.
 #' 
 #' This is a function used get Google minutely trading data of stocks.
 #'
