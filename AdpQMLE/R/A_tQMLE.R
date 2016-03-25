@@ -1,6 +1,6 @@
-#' This is the function which can be used to estimate parameters of garch(1,1)
+#' This is the function which can be used to estimate parameters of all kinds of models. The critical idea of this methods is to estimate parameters according to data themselves with unspecified assumption of error's distribution. 
 #' 
-#' Adaptive Quasi Maximum Likelihood Estimation
+#' @title Adaptive Quasi Maximum Likelihood Estimation
 #' 
 #' @param h 
 #' @param x 
