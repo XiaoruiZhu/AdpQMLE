@@ -13,6 +13,7 @@ kurtosis(xx$x)
 
 ########### 2. The basic MLE method testing. ###############
 # Test for MLE function #
+<<<<<<< HEAD
 xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 1000, rnd = "rt", df.t = 2.2)
 y <- xx$x
 # alpha <- c(0.1, 0.5); beta <- c(0.2) # GARCH(1,1) coefficients
@@ -28,6 +29,24 @@ est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
 est1
 
 est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 15)
+=======
+xx <- GARCH_t(alpha = c(0.1, 0.1, 0.1), beta = 0.5, n = 1000, rnd = "rt", df.t = 80)
+y <- xx$x
+alpha <- c(0.1, 0.5); beta <- c(0.2) # GARCH(1,1) coefficients
+x.e.sig <- GARCH1_1(n=1000, a = alpha, b = beta)
+x <- x.e.sig$series 
+
+plot(y, type = "l")
+plot(x, type = "l")
+
+library(tseries)
+x.arch <- garch(y, order = c(2,1)) # Fit GARCH(1,1)
+est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
+est1
+
+
+est2 <- tQMLE(y = x, LogLFunc = LogL_GARCH_t, dfest = 20)
+>>>>>>> 3581c33a5c7c57b0974f087a0f867a4de671ea6e
 est2
 
 # Finished test for MLE and GARCH with normal innovation.
