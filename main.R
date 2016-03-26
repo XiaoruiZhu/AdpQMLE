@@ -1,33 +1,34 @@
 
-setwd('Y:/PH.D/Fields/R_packages/AdpQMLE/AdpQMLE') # set the working path as AdpQMLE
-dir() # list all the files and folders in this path
 ######## Let's wrep up whole stuff from the bottom up! ##############
 
 ############ 1. The GARCH generating function. ##############
 # Test for GARCH_t function #
-xx <- GARCH_t(alpha = c(0.1, 0.2), beta = 0.5, n = 200, rnd = "rt", df.t = 2.3)
-head(xx)
+xx <- GARCH_t(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rt", df.t = 2.3)
+# head(xx)
 plot(xx$x, type = "l")
 plot(xx$sig.sq, type = "l")
 library(timeDate)
-kurtosis(xx)
+kurtosis(xx$x)
 ###########     OK, END      ###############
 
 ########### 2. The basic MLE method testing. ###############
 # Test for MLE function #
-alpha <- c(0.1, 0.5)
-beta <- c(0.2) # GARCH(1,1) coefficients
+xx <- GARCH_t(alpha = c(0.1, 0.1, 0.1), beta = 0.5, n = 1000, rnd = "rt", df.t = 80)
+y <- xx$x
+alpha <- c(0.1, 0.5); beta <- c(0.2) # GARCH(1,1) coefficients
 x.e.sig <- GARCH1_1(n=1000, a = alpha, b = beta)
 x <- x.e.sig$series 
 
-# x <- ts(x[101:1100])
-
+plot(y, type = "l")
 plot(x, type = "l")
+
 library(tseries)
-x.arch <- garch(x, order = c(1,1)) # Fit GARCH(1,1)
-est1 <- MLE(series = x, LogLFunc = LogL_GARCH_Norm)
+x.arch <- garch(y, order = c(2,1)) # Fit GARCH(1,1)
+est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
 est1
-est2 <- tQMLE(series = x, LogLFunc = LogL_GARCH_t, dfest = 20)
+
+
+est2 <- tQMLE(y = x, LogLFunc = LogL_GARCH_t, dfest = 20)
 est2
 
 # Finished test for MLE and GARCH with normal innovation.
