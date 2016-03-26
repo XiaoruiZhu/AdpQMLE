@@ -1,12 +1,15 @@
-#' tQMLE is a function that can be used to estimate parameters of GARCH(1,1) with student's t innovation by 
+#' tQMLE is a function that can be used to estimate parameters of GARCH(p,q) with student's t innovation by 
 #' specified log-likelihood estimation as "LogL_GARCH_t" and "dfest"(degree of freedom). It also includes 
 #' QMLE other
 #'
 #' @title Quasi-maximum likelihood estimation with student's t innovation
+#'
 #' @param series The orginal time series, which need to be fitted as GARCH(1,1)  
-#' @param LogLFunc is the log likelihood function of GARCH(1,1) with student's t innovation. 
+#' @param LogLFunc is the log likelihood function of GARCH(p,q) with student's t innovation. The model is 
+#'        setted as \eqn{\sigma^{2}_{t|t-1}=\omega+\sum_{i=1}^{q}\alpha_{i}u^{2}_{t-i}+\sum_{j=1}^{p}\beta_{j}\sigma^{2}_{t-j}}
 #'        This input can be changed according to assumption. Default setting is normal distributed innovation. 
 #' @param dfest is specified degree of freedom of innovation. 
+#' @param order \eqn{p}: order for GARCH terms, \eqn{q}: order for ARCH terms. 
 #'
 #' @return
 #' @export
@@ -14,13 +17,13 @@
 #' @examples
 #' # If the prespecified degree of freedom of student's t innovation is 4, then the tQML estimator will be:
 #' # est <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, dfest = 4)
-tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), dfest){
+#' 
+tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), order = c(1,1), dfest){
   # sig2 in the formula is the sig^2!!!!!!!!!!!!!!pay attention.
-  # LogL_GARCH_t is the log-likelihood function of GARCH(1,1) model with t innovation
   if (missing(series)) {
     stop("No input data for 'series'!")
   }
-  if (missing(LogLFunc) || (LogLFunc != "LogL_GARCH_t") || (missing(dfest))) {
+  if (missing(LogLFunc) || (missing(dfest))) {
     LogLFunc <- LogL_GARCH_Norm
     QMLE.N <- MLE(series = series, LogLFunc)$MLE.N
     list(QMLE.N = QMLE.N)
@@ -28,7 +31,11 @@ tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), dfest
   {
     df <- dfest
     LogLFunc <- LogL_GARCH_t
-    QMLE.t <- nlminb(c(0.01,0.01,0.01), LogLFunc(series,df), lower=c(0,0,0), upper=c(Inf,1,1))
+    q <- order[1]; p <- order[2]
+    ini.para <- rep(0.01, p+q+1) 
+    low.cons <- rep(0, p+q+1)
+    up.cons <- c(Inf, rep(1, p+q))
+    QMLE.t <- nlminb(ini.para, LogLFunc(series, p, q, df), lower=low.cons, upper=up.cons)
     list(QMLE.t = QMLE.t$par)
   }
 }
