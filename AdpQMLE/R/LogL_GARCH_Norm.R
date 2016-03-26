@@ -21,11 +21,8 @@ LogL_GARCH_Norm <- function(series, p, q) {
     d <- max(q,p)
     sig2[1:(d)] <- alpha[1]/(1.0-sum(alpha[2:(q+1)])-sum(beta))
     for (t in (d+1):n){
-#       tem2 <- beta * (tem2+tem1)
-#       tem1 <- series[t-1]^2
-#       sig2[t] <- (w/(1-beta) + alpha * (tem1+tem2)) 
       sig2[t] = sum(alpha * c(1, series[t - (1:q)]^2)) + sum(beta * sig2[t - (1:p)])
-      #Change this part based on my NOTES in red GARCH(P,Q)  
+      # It is changed based on my NOTES in red GARCH(P,Q)  
     }
     if (c(alpha,beta) > rep(0,(q+p+1)) && (sum(alpha[2:(q+1)])+sum(beta)) < 1 && sig2>=0)  
     {
