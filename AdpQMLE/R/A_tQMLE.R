@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-A_tQMLE=function(h,x){
+A_tQMLE <- function(h,x){
   # This part need to be changed and revised for efficient calculation.
   Estm=matrix(NA,11,3)
   Bdf.t=rep(NA,11)
