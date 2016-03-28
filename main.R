@@ -22,7 +22,13 @@ est1 <- MLE(y = x, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
 est1
 
 est2 <- tQMLE(series = x, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 20)
-est2
+est2$QMLE.t
+plot(est2$e, type='l')
+
+est3 <- tQMLE(series = x, order = c(1,1))
+summary(est3)
+est3$QMLE.N
+
 # This is too bad.
 
 # Test for GARCH(1,1) with t innovation #
@@ -92,13 +98,53 @@ myMLE
 #####################################################
 
 ############# 3. com.residue function writing and testing ###################
+## # 计算MLE得出的残差e.t，这个是需要来寻找最优f的参数的，yita=1作为边界！
+n <- 1000; df <- 4
+teste.t <- rt(n,df)
+library(timeDate)
+mean(teste.t); var(teste.t); kurtosis(teste.t)
+Qt.df=c(0.3,0.5,0.7,0.9,1,1.2,1.4,1.6,1.8,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,8,9,10,11,15,20,30,100)
+samplesYITA=rep(NA,length(Qt.df)) 
 
+# Bdf.t[1]=200
+for (i in 1:length(Qt.df)){
+  samplesYITA[i]=YITAtQMLE(e=teste.t,dfest=Qt.df[i])
+  }
+# 接下来用理论的rt残差与之对比看yita大概走向
+samplesYITA
+wherebestYita=which(min(abs(samplesYITA-1))==abs(samplesYITA-1))
+
+newdf <- Qt.df[wherebestYita]
+testYITA=YITAtQMLE(e=teste.t,dfest=newdf)
+testYITA
+newdf <- newdf/testYITA^3
+testYITA=YITAtQMLE(e=teste.t,dfest=newdf)
+testYITA
+newdf <- newdf/testYITA^3
+testYITA=YITAtQMLE(e=teste.t,dfest=newdf)
+testYITA
+newdf
 ################################
 
 
-############# 5. EstmBestdf function writing and testing ###################
+############# 5. A_tQMLE function writing and testing ###################
 ################################
+xx <- GARCH_t(alpha = c(0.1, 0.3), beta = 0.4, n = 500, rnd = "rt", df.t = 6)
+y <- xx$x
+plot(y, type = "l")
+library(tseries)
+x.arch <- garch(y, order = c(1,1)) 
+est.Norm <- tQMLE(series = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
+est.Norm$QMLE.N
+e.norm <- est.Norm$e
+plot(e.norm,type='l')
+YITAtQMLE(e=e.norm, dfest = 80)
+Estdf(e.norm)
+est <- A_tQMLE(series = y, order = c(1,1))
+est
 
+sss <- Estdf(rt(1000, 1.5))
+sss
 ############# 6. YITAtQMLE function writing and testing ###################
 ################################
 
