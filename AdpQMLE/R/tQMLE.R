@@ -16,8 +16,16 @@
 #'
 #' @examples
 #' # If the prespecified degree of freedom of student's t innovation is 4, then the tQML estimator will be:
-#' # est <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, dfest = 4)
-#' 
+#' xx <- GARCH_t(alpha = c(0.1, 0.2, 0.3), beta = 0.3, n = 1000, rnd = "rt", df.t = 4)
+#' y <- xx$x
+#' plot(y, type = "l")
+#' # Two bad estimation methods
+#' x.arch <- garch(y, order = c(2,1)) # Fit GARCH(2,1)
+#' est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
+#' est1
+#' # Better estimation methods with specified innovation.
+#' est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, dfest = 4)
+#' est2
 tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), order = c(1,1), dfest){
   # sig2 in the formula is the sig^2!!!!!!!!!!!!!!pay attention.
   if (missing(series)) {
