@@ -29,7 +29,7 @@ LogL_GARCH_t <- function(series, p, q, df){
     {
       tQMLE.e <- series / (sqrt(sig2))
       g <- (gamma((df + 1)/2) / (pi * df)^0.5 / gamma(df/2))*(1+tQMLE.e^2/(df))^(-(df+1)/2)
-      return(sum(2*log(sqrt(sig2))-log(g)))
+      return(sum(log(sqrt(sig2))-log(g)))
     }
     else return(Inf)
   }
