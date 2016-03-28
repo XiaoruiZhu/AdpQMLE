@@ -11,7 +11,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 LogL_GARCH_Norm <- function(series, p, q) {
   GARCH_Norm <- function(para){
     n <- length(series)
