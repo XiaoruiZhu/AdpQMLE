@@ -31,19 +31,22 @@ tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), order
   if (missing(series)) {
     stop("No input data for 'series'!")
   }
+  q <- order[1]; p <- order[2]
   if (missing(LogLFunc) || (missing(dfest))) {
     LogLFunc <- LogL_GARCH_Norm
-    QMLE.N <- MLE(series = series, LogLFunc)$MLE.N
-    list(QMLE.N = QMLE.N)
+    QMLE.N <- MLE(y = series, LogLFunc(series), order = order)$MLE.N
+    pred <- com.residue(alpha = QMLE.N[1:(q+1)], beta = QMLE.N[(q+2):(p+q+1)], series=series)
+    list(QMLE.N = QMLE.N, sigma.sq = pred$sig.sq, e = pred$e)
   } else
   {
     df <- dfest
     LogLFunc <- LogL_GARCH_t
-    q <- order[1]; p <- order[2]
     ini.para <- rep(0.01, p+q+1) 
     low.cons <- rep(0, p+q+1)
     up.cons <- c(Inf, rep(1, p+q))
     QMLE.t <- nlminb(ini.para, LogLFunc(series, p, q, df), lower=low.cons, upper=up.cons)
-    list(QMLE.t = QMLE.t$par)
+    QMLE.t <- QMLE.t$par
+    pred <- com.residue(alpha = QMLE.t[1:(q+1)], beta = QMLE.t[(q+2):(p+q+1)], series=series)
+    list(QMLE.t = QMLE.t, sigma.sq = pred$sig.sq, e = pred$e)
   }
 }
