@@ -12,62 +12,49 @@ kurtosis(xx$x)
 ###########     OK, END      ###############
 
 ########### 2. The basic MLE method testing. ###############
-# Test for MLE function #
-<<<<<<< HEAD
-xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 1000, rnd = "rt", df.t = 2.2)
+# Test for GARCH(1,1) with normal innovation
+alpha <- c(0.1, 0.5); beta <- c(0.2) # GARCH(1,1) coefficients
+x.e.sig <- GARCH1_1(n=1000, a = alpha, b = beta)
+x <- x.e.sig$series
+plot(x, type = "l")
+x.arch <- garch(x, order = c(1,1)) 
+est1 <- MLE(y = x, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
+est1
+
+est2 <- tQMLE(series = x, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 20)
+est2
+# This is too bad.
+
+# Test for GARCH(1,1) with t innovation #
+xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
 y <- xx$x
-# alpha <- c(0.1, 0.5); beta <- c(0.2) # GARCH(1,1) coefficients
-# x.e.sig <- GARCH1_1(n=1000, a = alpha, b = beta)
-# x <- x.e.sig$series 
-
 plot(y, type = "l")
-# plot(x, type = "l")
 
-library(tseries)
 x.arch <- garch(y, order = c(1,1)) 
 est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
 est1
 
-est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 15)
-=======
-xx <- GARCH_t(alpha = c(0.1, 0.1, 0.1), beta = 0.5, n = 1000, rnd = "rt", df.t = 80)
+est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 4)
+est2
+
+# Test for GARCH(2,1)
+xx <- GARCH_t(alpha = c(0.1, 0.1, 0.1), beta = 0.5, n = 1000, rnd = "rt", df.t = 5)
 y <- xx$x
-alpha <- c(0.1, 0.5); beta <- c(0.2) # GARCH(1,1) coefficients
-x.e.sig <- GARCH1_1(n=1000, a = alpha, b = beta)
-x <- x.e.sig$series 
 
 plot(y, type = "l")
-plot(x, type = "l")
 
-library(tseries)
-x.arch <- garch(y, order = c(2,1)) # Fit GARCH(1,1)
+x.arch <- garch(y, order = c(2,1)) # Fit GARCH(2,1)
 est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
 est1
-
-
-est2 <- tQMLE(y = x, LogLFunc = LogL_GARCH_t, dfest = 20)
->>>>>>> 3581c33a5c7c57b0974f087a0f867a4de671ea6e
+est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(2,1), dfest = 5)
 est2
 
 # Finished test for MLE and GARCH with normal innovation.
-
-
-###########################################################################
 # Test tQMLE for GARCH with t
-xx <- GARCH_t(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rt", df.t = 2.3)
-plot(xx, type = "l")
-library(timeDate)
-kurtosis(xx)
-estxxMLE <- MLE(y = xx, LogLFunc = "LogL_GARCH_Norm")
-x.arch <- garch(xx, order = c(1,1)) # Fit GARCH(1,1)
-estxxMLE
-
-estxx <- tQMLE(series = xx, LogLFunc = "LogL_GARCH_t", dfest = 5)
-estxx
-
 # Done, with known degree of freedom of t innovation, the tQMLE is better than MLE with normal
 ###########################################################################
 
+###########################################################################
 # 3. Creating MLE for linear regression and test #####
 
 # Fix x values for all runs of the simulation; draw from an exponential
@@ -78,11 +65,7 @@ sigma.sq <- 1
 fixed.x <- rexp(n=n)
 # Simulate from the model Y=\beta_0+\beta_1*x+N(0,\sigma^2)
 # Inputs: intercept; slope; variance; vector of x; return sample or estimated
-# linear model?
-# Outputs: data frame with columns x and y OR linear model fit to simulated y
-# regressed on x
 data <- gen.lin(intercept=beta.0, slope = beta.1, noise.variance=sigma.sq, x=fixed.x, dis.error = "rt", dft=3)
-head(data)
 par(mfrow=c(1,1))
 hist(fixed.x, freq = FALSE, breaks = 50, xlab = expression(x[i]), main = "")
 hist(data$y, freq = FALSE, breaks = 50, xlab = expression(y[i]), main = "")
@@ -92,6 +75,7 @@ test
 y <- as.matrix(data$y); X <- as.matrix(data$x)
 myMLE <- MLE(y, X, LogLFunc = "LogL_Linear_Norm")
 myMLE
+# Very good example for single linear regression by suing "MLE" function.
 
 # 
 # par(mfrow=c(2,1))
