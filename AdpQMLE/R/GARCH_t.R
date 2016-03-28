@@ -13,6 +13,11 @@
 ##' @return A list includes time-series "x" and conditional sigma square "sig.sq". 
 ##' @export
 ##' @author Xiaorui(Jeremy) Zhu
+##' @examples 
+##' # Test for GARCH(1,1) with t innovation #
+##' xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
+##' y <- xx$x
+##' plot(y, type = "l")
 GARCH_t <- function (alpha, beta, n = 100, rnd = c("rt", "rnorm"), df.t, ntrans = 100)
 {
   # alpha includ intercept alpha_0 and ARCH terms (q).
