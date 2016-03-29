@@ -27,7 +27,7 @@ A_tQMLE <- function(series, order = c(1,1)){
   e.t <- Est.model$e
   # y.hat <- sqrt(Est.model$sigma.sq)
   # diff <- sum((y.hat-series)^2)/n
-  Estm[1,] <- c(Est.model$QMLE.N, NA, NA, NA) 
+  Estm <- c(Est.model$QMLE.N, NA, NA, NA) 
   # alpha <- Estm[1,1:(q+1)]; beta <- Estm[1, (q+2):(p+q+1)]
   # Second step!!
   # The scale parameter yita_f is the boundary. Equal to 1 is the condition.  
@@ -49,7 +49,7 @@ A_tQMLE <- function(series, order = c(1,1)){
   # 第二步开始估计，用的是tQMLE，其中t分布用的参数时第一步估计出来的Bestdf.t
   # source('EstmBestdf.R')
   iter = 1
-  while (iter<max.iter & diff > 0.001) {
+  while (iter<max.iter & diff > 0.00001) {
     iter <-  iter+1
     Est.model <- tQMLE(series = series, LogLFunc = "LogL_GARCH_t", order = order, dfest = new.df)  
     e.t <- Est.model$e
@@ -57,7 +57,7 @@ A_tQMLE <- function(series, order = c(1,1)){
     # new.diff <- sum((y.hat-series)^2)/n
     new.para <- Est.model$QMLE.t
     new.diff <- sum((para-new.para)^2)/(p+q+1)
-    Estm[iter,] <- c(Est.model$QMLE.t, new.df, new.YITA, new.diff)
+    Estm <- rbind(Estm, c(Est.model$QMLE.t, new.df, new.YITA, new.diff))
     new.df <- Estdf(e.t)
     new.YITA <- YITAtQMLE(e=e.t,dfest=new.df) # This is the crux! Using the assumed df to estimate yita!
     diff <- new.diff

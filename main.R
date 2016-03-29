@@ -129,7 +129,7 @@ newdf
 
 ############# 5. A_tQMLE function writing and testing ###################
 ################################
-xx <- GARCH_t(alpha = c(0.1, 0.3), beta = 0.4, n = 500, rnd = "rt", df.t = 6)
+xx <- GARCH_t(alpha = c(0.1, 0.3), beta = 0.4, n = 500, rnd = "rt", df.t = 7)
 y <- xx$x
 plot(y, type = "l")
 library(tseries)
@@ -140,11 +140,12 @@ e.norm <- est.Norm$e
 plot(e.norm,type='l')
 YITAtQMLE(e=e.norm, dfest = 80)
 Estdf(e.norm)
+
 est <- A_tQMLE(series = y, order = c(1,1))
 est
 
-sss <- Estdf(rt(1000, 1.5))
-sss
+est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 7)
+est2$QMLE.t
 ############# 6. YITAtQMLE function writing and testing ###################
 ################################
 
