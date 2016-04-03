@@ -7,11 +7,11 @@
 GARCH1_1(n, a, b)
 }
 \arguments{
-\item{n}{series number}
+\item{n}{Number of series}
 
-\item{a}{alpha include intercept and alpha1}
+\item{a}{Alpha vector, which includes intercept and alpha1}
 
-\item{b}{beta}
+\item{b}{Beta vector}
 }
 \value{
 A list includes GARCH(1,1) series, error series and conditional variances series.
@@ -20,6 +20,8 @@ A list includes GARCH(1,1) series, error series and conditional variances series
 Example to generate GARCH(1,1) with normal innovation.
 }
 \examples{
-# Need revisions.
+ts1 <- GARCH1_1(100, a = c(0.5, 0.2), b = c(0.5))
+# Attention: GARCH1_1 return a list!
+plot(ts1$series, type = 'l')
 }
 

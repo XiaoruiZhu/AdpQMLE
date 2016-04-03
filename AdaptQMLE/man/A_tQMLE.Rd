@@ -15,7 +15,7 @@ A_tQMLE(series, order = c(1, 1))
 The estimation of parameters.
 }
 \description{
-This is the function which can be used to estimate parameters of all kinds of models.
+This is a function which can be used to estimate parameters of all kinds of models.
 The critical idea of this methods is to estimate parameters according to data
 themselves with unspecified assumption of error's distribution.
 }

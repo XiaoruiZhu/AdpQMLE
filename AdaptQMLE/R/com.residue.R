@@ -1,13 +1,12 @@
-#' com.residue is a function used to calculate the residue of GARCH model so that the futher adaptive procedure can be move forward.
+#' A internal function used to calculate the residue of GARCH model so that the futher adaptive procedure can be move forward.
 #'
-#' @param alpha Includes intercept and all parameters of ARCH terms.
-#' @param beta Includes all parameters of GARCH terms.
-#' @param series Time series.
+#' @title Internal function to calculate estimation residuals  
+#' @param alpha A vector includes intercept and all parameters of ARCH terms.
+#' @param beta A vector includes all parameters of GARCH terms.
+#' @param series Original time series.
 #'
 #' @return  Return a list contains estimators, residues and conditional sigma square.
 #'
-#' @examples
-#' # need to be changed.
 com.residue <- function(alpha, beta, series){
   n <- length(series)
   sig2 <- numeric(n)
