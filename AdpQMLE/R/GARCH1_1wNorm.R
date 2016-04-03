@@ -1,13 +1,14 @@
 #' Example to generate GARCH(1,1) with normal innovation.
-#'
+#' @title GARCH(1,1)
 #' @param n series number
 #' @param a alpha include intercept and alpha1
 #' @param b beta
 #'
-#' @return
+#' @return A list includes GARCH(1,1) series, error series and conditional variances series.
 #' @export
 #'
 #' @examples
+#' # Need revisions.
 GARCH1_1 <- function(n, a, b){
   e <- rnorm(n)
   x <- double(n)

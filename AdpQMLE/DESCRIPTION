@@ -1,11 +1,17 @@
-Package: AdpQMLE
-Title: Adaptive Quasi-Maximum Likelihood Estimation of GARCH model.
-Version: 0.1
+Package: AdaptQMLE
+Type: Package
+Title: Adaptive Quasi-Maximum Likelihood Estimation
+Version: 0.1.0
+Date: 2016-04-03
 Authors@R: "Xiaorui Zhu <zhuxiaorui1989@gmail.com> [aut, cre]"
-Description: This package is the general method of 'Adaptive Quasi-Maximum
-    Likelihood Estimation' of GARCH model.
+Maintainer: Xiaorui(Jeremy) Zhu <zhuxiaorui1989@gmail.com>
 Depends:
-    R (>= 3.0.1)
-License: MIT
+    R (>= 3.0.1), utils, xts
+Imports:
+    zoo, tseries, its
+Description: Includes all related function of Adaptive Quasi-Maximum Likelihood Estimation
+    method. It is not only for GARCH model with normal distributed innovation, but also for
+    models with student's t innovation, Pearson's type IV innovation and so on.
+License: GPL-3
 LazyData: true
 RoxygenNote: 5.0.1

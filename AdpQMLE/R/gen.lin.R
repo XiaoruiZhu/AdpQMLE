@@ -1,13 +1,15 @@
-#' @title Generating function for single linear model. This only works for y = a + b*x.
+#' Generating function for single linear model y = a + b*x.
 #'
-#' @param intercept 
-#' @param slope 
-#' @param noise.variance 
-#' @param x 
+#' @title Single linear model y = a + b*x.
+#'
+#' @param intercept The intercept of single linear model.
+#' @param slope The parameter b, which is the slope of y = a + b*x.
+#' @param noise.variance The variance of error series.
+#' @param x The depedent variable.
 #' @param dis.error Distribution of error, student's t or normal.
 #' @param dft The degree of freedom if error was specified as student's t.
 #'
-#' @return
+#' @return A data frame contains x, y and error series.
 #' @export
 #'
 gen.lin <- function(intercept, slope, noise.variance, x, dis.error = c("rt", "rnorm"), dft) {
@@ -19,5 +21,5 @@ gen.lin <- function(intercept, slope, noise.variance, x, dis.error = c("rt", "rn
     e <- rnorm(length(x), 0, sd=sqrt(noise.variance))
   }
   y <- rep(intercept,length(x)) + x %*% as.matrix(slope) + e
-  return(data.frame(x=x, y=y, e = e)) 
+  return(data.frame(x=x, y=y, e = e))
 }

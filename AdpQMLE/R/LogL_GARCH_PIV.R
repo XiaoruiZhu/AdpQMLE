@@ -1,16 +1,16 @@
-#' The Log likelihood function of GARCH model. Here is the GARCH(p,q) with student's t error
+#' The Log-likelihood function of GARCH model with Pearson's Type IV (PIV) distributed error
 #'
-#' @title LogL_GARCH_t
+#' @title log-likelihood function of GARCH(p,q) with Pearson's Type IV (PIV) distribution
 #'
-#' @param series The time series that need to be fitted
+#' @param series The time series that need to be fitted.
 #' @param p The order of GARCH terms \eqn{\sigma^2}
 #' @param q The order of ARCH terms \eqn{\epsilon^2}
 #' @param df The specified degree of freedome of student's t innovation.
 #'
-#' @return Log likelihood funtion.
+#' @return Log-Likelihood function of GARCH with t error
 #'
-LogL_GARCH_t <- function(series, p, q, df){
-  GARCH_e_t <- function(para){
+LogL_GARCH_PIV <- function(series, p, q, df){
+  GARCH_e_PIV <- function(para){
     n <- length(series)
     sig2 <- numeric(n)
     alpha <- para[1:(q+1)]
@@ -28,5 +28,5 @@ LogL_GARCH_t <- function(series, p, q, df){
     }
     else return(Inf)
   }
-  GARCH_e_t
+  GARCH_e_PIV
 }

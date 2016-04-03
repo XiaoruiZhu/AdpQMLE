@@ -1,17 +1,17 @@
-#' tQMLE is a function that can be used to estimate parameters of GARCH(p,q) with student's t innovation by 
-#' specified log-likelihood estimation as "LogL_GARCH_t" and "dfest"(degree of freedom). It also includes 
+#' tQMLE is a function that can be used to estimate parameters of GARCH(p,q) with student's t innovation by
+#' specified log-likelihood estimation as "LogL_GARCH_t" and "dfest"(degree of freedom). It also includes
 #' QMLE other
 #'
 #' @title Quasi-maximum likelihood estimation with student's t innovation
 #'
-#' @param series The orginal time series, which need to be fitted as GARCH(1,1)  
-#' @param LogLFunc is the log likelihood function of GARCH(p,q) with student's t innovation. The model is 
+#' @param series The orginal time series, which need to be fitted as GARCH(1,1)
+#' @param LogLFunc is the log likelihood function of GARCH(p,q) with student's t innovation. The model is
 #'        setted as \eqn{\sigma^{2}_{t|t-1}=\omega+\sum_{i=1}^{q}\alpha_{i}u^{2}_{t-i}+\sum_{j=1}^{p}\beta_{j}\sigma^{2}_{t-j}}
-#'        This input can be changed according to assumption. Default setting is normal distributed innovation. 
-#' @param dfest is specified degree of freedom of innovation. 
-#' @param order \eqn{p}: order for GARCH terms, \eqn{q}: order for ARCH terms. 
+#'        This input can be changed according to assumption. Default setting is normal distributed innovation.
+#' @param dfest is specified degree of freedom of innovation.
+#' @param order \eqn{p}: order for GARCH terms, \eqn{q}: order for ARCH terms.
 #'
-#' @return
+#' @return A list.
 #' @export
 #'
 #' @examples
@@ -20,6 +20,7 @@
 #' y <- xx$x
 #' plot(y, type = "l")
 #' # Two bad estimation methods
+#' library(tseries)
 #' x.arch <- garch(y, order = c(2,1)) # Fit GARCH(2,1)
 #' est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
 #' est1
@@ -41,7 +42,7 @@ tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), order
   {
     df <- dfest
     LogLFunc <- LogL_GARCH_t
-    ini.para <- rep(0.01, p+q+1) 
+    ini.para <- rep(0.01, p+q+1)
     low.cons <- rep(0, p+q+1)
     up.cons <- c(Inf, rep(1, p+q))
     QMLE.t <- nlminb(ini.para, LogLFunc(series, p, q, df), lower=low.cons, upper=up.cons)

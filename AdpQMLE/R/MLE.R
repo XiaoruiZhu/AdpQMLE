@@ -1,25 +1,27 @@
 #' Simple Maximum Likelihood Estimation based on normal residual assumption.
-#' 
 #'
-#' @param LogLFunc 
+#'
 #' @param y The dependent variable or time series.
-#' @param X The single independent variable for single linear regression. It could be 
+#' @param X The single independent variable for single linear regression. It could be
 #'          missing if use this function to estimate GARCH(p,q) model.
-#' @param order 
+#' @param LogLFunc The log-likelihood function of models.
+#' @param order The order of GARCH model.
 #'
 #' @return is the estimated parameters of GARCH(p,q)
+#' @importFrom tseries garch
 #' @export
 #'
 #' @examples
 #' # Test for GARCH(1,1) with t innovation #
+#' library(tseries)
 #' xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
 #' y <- xx$x
 #' plot(y, type = "l")
 #' # Estimate parameters using "garch" function in the "tseries" package
-#' x.arch <- garch(y, order = c(1,1)) 
+#' x.arch <- garch(y, order = c(1,1))
 #' est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
 #' est1
-#' 
+#'
 #' # Example for single linear regression model.
 #' # Simulate from the model \eqn{Y=\beta_0+\beta_1*x+N(0,\sigma^2)}
 #' # Inputs: intercept; slope; variance; vector of x; return sample or estimated
@@ -44,7 +46,7 @@ MLE <- function(y, X, LogLFunc = c("LogL_GARCH_Norm", "LogL_Linear_Norm"), order
   if (missing(X) || LogLFunc == "LogL_GARCH_Norm"){
     LogLFunc <- LogL_GARCH_Norm
     q <- order[1]; p <- order[2]
-    ini.para <- rep(0.01, p+q+1) 
+    ini.para <- rep(0.01, p+q+1)
     low.cons <- rep(0, p+q+1)
     up.cons <- c(Inf, rep(1, p+q))
     MLE.N <- nlminb(ini.para, LogLFunc(y, p, q), lower=low.cons, upper=up.cons)

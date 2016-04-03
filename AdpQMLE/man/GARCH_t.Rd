@@ -2,22 +2,25 @@
 % Please edit documentation in R/GARCH_t.R
 \name{GARCH_t}
 \alias{GARCH_t}
-\title{T.GARCH}
+\title{GARCH.t}
 \usage{
-GARCH_t(alpha, beta, n = 100, rnd = rt, df.t, ntrans = 100)
+GARCH_t(alpha, beta, n = 100, rnd = c("rt", "rnorm"), df.t, ntrans = 100)
 }
 \arguments{
-\item{alpha}{The vector include the incept and the parameters of autoregression part}
+\item{alpha}{The vector include the intercept and the parameters of autoregression part, which is ARCH terms (q).}
 
-\item{beta}{The vector include the parameters of conditional variancea}
+\item{beta}{The vector include the parameters of conditional variance, which is GARCH terms with order p.}
 
 \item{n}{The lenght of time series}
 
-\item{rnd}{The distribution of error(innovation) of GARCH model}
+\item{rnd}{The distribution of error(innovation) of GARCH model. Right now we only consider student's t and normal distributions. Generalized Gaussian and Pearson Type III distributions will be included.}
 
-\item{df.t}{The df of student's t distribution. df.t>0 continuous parameter}
+\item{df.t}{The df of student's t distribution. df.t>2 continuous parameter}
 
 \item{ntrans}{burn-in size, i.e. number of initial simulated data to be discarded}
+}
+\value{
+A list includes time-series "x" and conditional sigma square "sig.sq".
 }
 \description{
 Function to generate GARCH time series with t-students distribution innovations
@@ -25,7 +28,13 @@ Function to generate GARCH time series with t-students distribution innovations
 \details{
 This function is used to generate GARCH time series with t-students distribution innovations. This kind of innovations will better perform the heavy-tailed characteristics of financial data.
 }
+\examples{
+# Test for GARCH(1,1) with t innovation #
+xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
+y <- xx$x
+plot(y, type = "l")
+}
 \author{
-Xiaorui.Zhu
+Xiaorui(Jeremy) Zhu
 }
 

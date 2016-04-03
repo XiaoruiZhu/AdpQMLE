@@ -1,12 +1,10 @@
-#' The Log-likelihood function of linear model. Here is the y=a + b*x. Need to be changed. 
+#' The Log-likelihood function of linear model. Here is the y=a + b*x. Need to be changed.
 #'
+#' @title Log-likelihood function of single linear model.
 #' @param X The independent variable x without intercept.
 #' @param y The dependent variable y.
 #'
-#' @param 
-#'
-#' @return
-#' @export
+#' @return Log-likelihood function
 LogL_Linear_Norm <- function(X, y){
   Linear_Norm <- function(para){
     n <- nrow(X)

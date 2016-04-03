@@ -1,30 +1,33 @@
-#' getHighFreqData
-#'
 #' This function is used to download high frequent data of stock. The source is Google.
 #'
-#' @param start is the start date of your period with the format "YYYY-MM-DD". Default start date is "1991-01-02".
-#' @param end is the end date of your period with the format "YYYY-MM-DD". The default end date is the day before the today in your system. 
-#' @param instrument is quote symbol of the stock. This quote should correspond with Yahoo list. Symbols can be found here: http://www.marketwatch.com/tools/industry/stocklist.asp?bcind_ind=9537&bcind_period=3mo
-#' @param provider includes "google", "yahoo", "onada".
-#' @param savename is the name of the file including downloaded data. The default folder is the current working directory of the R process.
+#' @title getHighFreqData
+#'
+#' @param start The start date of your period with the format "YYYY-MM-DD". Default start date is "1991-01-02".
+#' @param end The end date of your period with the format "YYYY-MM-DD". The default end date is the day before the today in your system.
+#' @param instrument The quote symbol of the stock. This quote should correspond with Yahoo list. Symbols can be found here: http://www.marketwatch.com/tools/industry/stocklist.asp?bcind_ind=9537&bcind_period=3mo
+#' @param provider The source of data, contains options: "google", "yahoo", "onada".
+#' @param savename The saving name the file including downloaded data. The default folder is the current working directory of the R process.
 #'
 #' @importFrom tseries get.hist.quote
-#' @import utils
-#' @return The time series data will be returned. 
+#' @importFrom zoo index zoo index<-
+#' @importFrom utils download.file
+#' @importFrom its as.its
+#' @return The time series data will be returned.
 #' @export
 #'
 #' @examples
+#' # need revisions
 getHighFreqData=function(instrument, start, end, provider, savename){
-  if (missing(start)) 
+  if (missing(start))
     start <- "1991-01-02"
-  if (missing(end)) 
+  if (missing(end))
     end <- format(Sys.Date() - 1, "%Y-%m-%d")
   provider <- match.arg(provider)
   start <- as.Date(start)
   end <- as.Date(end)
   if (is.null(method)) {
     method <- getOption("download.file.method")
-    if (is.null(method)) 
+    if (is.null(method))
       method <- "auto"
   }
   if (provider == "google") {
@@ -32,15 +35,15 @@ getHighFreqData=function(instrument, start, end, provider, savename){
     destfile <- tempfile()
     i <- 1L
     repeat {
-      status <- tryCatch(download.file(url, destfile, method = method, 
+      status <- tryCatch(download.file(url, destfile, method = method,
                                        quiet = quiet), error = identity)
-      if (!inherits(status, "error") && (status == 0)) 
+      if (!inherits(status, "error") && (status == 0))
         break
       unlink(destfile)
       if (i >= 5L) {
-        if (inherits(status, "error")) 
+        if (inherits(status, "error"))
           stop(conditionMessage(status))
-        else stop(sprintf("download error, status %d", 
+        else stop(sprintf("download error, status %d",
                           status))
       }
       message("download error, retrying ...")
@@ -51,7 +54,7 @@ getHighFreqData=function(instrument, start, end, provider, savename){
       unlink(destfile)
       stop(paste("no data available for", instrument))
     }
-    x <- read.table(destfile, header = TRUE, sep = ",", as.is = TRUE, 
+    x <- read.table(destfile, header = TRUE, sep = ",", as.is = TRUE,
                     fill = TRUE)
     x <- na.omit(x)
     if (nrow(x) >= 2L && x[1L, 1L] == x[2L, 1L]) {
@@ -61,13 +64,13 @@ getHighFreqData=function(instrument, start, end, provider, savename){
     unlink(destfile)
     names(x) <- gsub("\\.", "", names(x))
     nser <- pmatch(quote, names(x)[-1]) + 1
-    if (any(is.na(nser))) 
+    if (any(is.na(nser)))
       stop("this quote is not available")
     n <- nrow(x)
     dat <- as.Date(as.character(x[, 1]), "%Y-%m-%d")
-    if (!quiet && (dat[n] != start)) 
+    if (!quiet && (dat[n] != start))
       cat(format(dat[n], "time series starts %Y-%m-%d\n"))
-    if (!quiet && (dat[1] != end)) 
+    if (!quiet && (dat[1] != end))
       cat(format(dat[1], "time series ends   %Y-%m-%d\n"))
     if (retclass == "ts") {
       jdat <- unclass(julian(dat, origin = as.Date(origin)))
@@ -84,8 +87,8 @@ getHighFreqData=function(instrument, start, end, provider, savename){
       y <- zoo(x, dat)
       y <- y[, seq_along(nser), drop = drop]
       if (retclass == "its") {
-        if (inherits(tryCatch(getNamespace("its"), error = identity), 
-                     "error")) 
+        if (inherits(tryCatch(getNamespace("its"), error = identity),
+                     "error"))
           warning("package its could not be loaded: zoo series returned")
         else {
           index(y) <- as.POSIXct(index(y))
