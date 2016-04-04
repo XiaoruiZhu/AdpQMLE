@@ -20,6 +20,7 @@ Return data include data untill now.
 This is a function used get Google minutely trading data of stocks.
 }
 \examples{
-# Need examples.
+AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =12)
+head(AMZN)
 }
 

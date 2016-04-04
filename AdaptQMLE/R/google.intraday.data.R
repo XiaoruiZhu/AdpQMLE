@@ -1,6 +1,6 @@
-#' google.intraday.data is used to download Google minutely trading date of stocks.
+#' This function is used to download Google minutely trading date of stocks.
 #'
-#' This is a function used get Google minutely trading data of stocks.
+#' @title A function used to get Google minutely trading data of stocks.
 #'
 #' @param symbol The stock symbol. This quote should correspond with Yahoo list. Symbols can be found here: http://www.marketwatch.com/tools/industry/stocklist.asp?bcind_ind=9537&bcind_period=3mo
 #' @param freq The interval of time. The unit of it is second. The minimal interval is 60 seconds. Like "60s". Please input numeric.
@@ -11,7 +11,8 @@
 #' @export
 #'
 #' @examples
-#' # Need examples.
+#' AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =12)
+#' head(AMZN)
 google.intraday.data <- function(symbol, freq, period) {
   base.url <- "http://www.google.com/finance/getprices?"
   options.url <- paste("i=",freq,"&p=",period,"d&f=d,o,h,l,c,v&df=cpct&q=", symbol, sep="")
@@ -35,5 +36,5 @@ google.intraday.data <- function(symbol, freq, period) {
   indexTZ(data.xts) <- "America/New_York"
   colnames(data.xts) <- c("Close", "High", "Low", "Open", "Volume")
 
-  data.xts
+  return(data.xts)
 }
