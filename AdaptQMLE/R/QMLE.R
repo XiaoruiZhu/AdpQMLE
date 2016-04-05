@@ -10,6 +10,8 @@
 #'        This input can be changed according to assumption. Default setting is normal distributed innovation.
 #' @param dfest is specified degree of freedom of innovation.
 #' @param order \eqn{p}: order for GARCH terms, \eqn{q}: order for ARCH terms.
+#' @param params.PIV vector/list of length 4 containing parameters m, nu, location, scale for Pearson 
+#'         type IV distribution (in this order!).
 #'
 #' @return A list.
 #' @export
@@ -25,20 +27,22 @@
 #' est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
 #' est1
 #' # Better estimation methods with specified innovation.
-#' est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, dfest = 4)
+#' est2 <- QMLE(series = y, LogLFunc = LogL_GARCH_t, dfest = 4)
 #' est2
-tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), order = c(1,1), dfest){
+QMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t", "LogL_GARCH_PIV"), order = c(1,1), dfest, params.PIV){
   # sig2 in the formula is the sig^2!!!!!!!!!!!!!!pay attention.
   if (missing(series)) {
     stop("No input data for 'series'!")
   }
   q <- order[1]; p <- order[2]
-  if (missing(LogLFunc) || (missing(dfest))) {
+  if (missing(LogLFunc)) {
+    # || (missing(dfest)) || (missing(params.PIV))) 
     LogLFunc <- LogL_GARCH_Norm
     QMLE.N <- MLE(y = series, LogLFunc(series), order = order)$MLE.N
     pred <- com.residue(alpha = QMLE.N[1:(q+1)], beta = QMLE.N[(q+2):(p+q+1)], series=series)
+    print("Estimated as normal error!")
     list(QMLE.N = QMLE.N, sigma.sq = pred$sig.sq, e = pred$e)
-  } else
+  } else if ((LogLFunc == "LogL_GARCH_t") && (!missing(dfest)))
   {
     df <- dfest
     LogLFunc <- LogL_GARCH_t
@@ -48,6 +52,19 @@ tQMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t"), order
     QMLE.t <- nlminb(ini.para, LogLFunc(series, p, q, df), lower=low.cons, upper=up.cons)
     QMLE.t <- QMLE.t$par
     pred <- com.residue(alpha = QMLE.t[1:(q+1)], beta = QMLE.t[(q+2):(p+q+1)], series=series)
+    print("Estimated as student's t error!")
     list(QMLE.t = QMLE.t, sigma.sq = pred$sig.sq, e = pred$e)
+  } else if ((LogLFunc == "LogL_GARCH_PIV") && (!missing(params.PIV)))
+  {
+    LogLFunc <- LogL_GARCH_PIV
+    ini.para <- rep(0.01, p+q+1)
+    low.cons <- rep(0, p+q+1)
+    up.cons <- c(Inf, rep(1, p+q))
+    m <- params.PIV$m; nu <- params.PIV$nu; lambda <- params.PIV$location; a <- params.PIV$scale
+    QMLE.PIV <- nlminb(ini.para, LogLFunc(series, p, q, lambda, a, nu, m), lower=low.cons, upper=up.cons)
+    QMLE.PIV <- QMLE.PIV$par
+    pred <- com.residue(alpha = QMLE.PIV[1:(q+1)], beta = QMLE.PIV[(q+2):(p+q+1)], series=series)
+    print("Estimated as Pearson Type IV error!")
+    list(QMLE.PIV = QMLE.PIV, sigma.sq = pred$sig.sq, e = pred$e)
   }
 }
