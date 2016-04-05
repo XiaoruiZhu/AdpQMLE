@@ -14,7 +14,7 @@
 #' @examples
 #' # Test for GARCH(1,1) with t innovation #
 #' library(tseries)
-#' xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
+#' xx <- GARCH_Gene(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
 #' y <- xx$x
 #' plot(y, type = "l")
 #' # Estimate parameters using "garch" function in the "tseries" package

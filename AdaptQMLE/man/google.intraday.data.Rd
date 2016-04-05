@@ -2,7 +2,7 @@
 % Please edit documentation in R/google.intraday.data.R
 \name{google.intraday.data}
 \alias{google.intraday.data}
-\title{google.intraday.data is used to download Google minutely trading date of stocks.}
+\title{A function used to get Google minutely trading data of stocks.}
 \usage{
 google.intraday.data(symbol, freq, period)
 }
@@ -17,7 +17,7 @@ google.intraday.data(symbol, freq, period)
 Return data include data untill now.
 }
 \description{
-This is a function used get Google minutely trading data of stocks.
+This function is used to download Google minutely trading date of stocks.
 }
 \examples{
 AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =12)

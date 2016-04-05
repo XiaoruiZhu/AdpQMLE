@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' # If the prespecified degree of freedom of student's t innovation is 4, then the tQML estimator will be:
-#' xx <- GARCH_t(alpha = c(0.1, 0.2, 0.3), beta = 0.3, n = 1000, rnd = "rt", df.t = 4)
+#' xx <- GARCH_Gene(alpha = c(0.1, 0.2, 0.3), beta = 0.3, n = 1000, rnd = "rt", df.t = 4)
 #' y <- xx$x
 #' plot(y, type = "l")
 #' # Two bad estimation methods
