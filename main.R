@@ -2,13 +2,32 @@
 ######## Let's wrep up whole stuff from the bottom up! ##############
 
 ############ 1. The GARCH generating function. ##############
-# Test for GARCH_t function #
-xx <- GARCH_t(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rt", df.t = 2.3)
+# Test for GARCH_Gene function #
+
+# student's t error
+xx <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rt", df.t = 2.3)
 # head(xx)
 plot(xx$x, type = "l")
 plot(xx$sig.sq, type = "l")
 library(timeDate)
 kurtosis(xx$x)
+
+# Normal error 
+xxnorm <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rnorm")
+plot(xxnorm$x, type = 'l')
+
+# Pearson Type IV error
+# m, nu, location(lambda), scale(a)
+library(PearsonDS)
+paraPIV <- list(m=4, nu=-2, location=0, scale=1)
+paraPIV
+x.PIV <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rpearsonIV", params.PIV = paraPIV)
+hist(x.PIV$x)
+plot(x.PIV$x, type = 'l')
+
+test.PIV <- rpearsonIV(1000, params=paraPIV)
+hist(test.PIV,probability = TRUE, breaks = 20)
+
 ###########     OK, END      ###############
 
 ########### 2. The basic MLE method testing. ###############
@@ -21,11 +40,11 @@ x.arch <- garch(x, order = c(1,1))
 est1 <- MLE(y = x, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
 est1
 
-est2 <- tQMLE(series = x, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 20)
+est2 <- QMLE(series = x, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 20)
 est2$QMLE.t
 plot(est2$e, type='l')
 
-est3 <- tQMLE(series = x, order = c(1,1))
+est3 <- QMLE(series = x, order = c(1,1))
 summary(est3)
 est3$QMLE.N
 
@@ -40,7 +59,7 @@ x.arch <- garch(y, order = c(1,1))
 est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
 est1
 
-est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 4)
+est2 <- QMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 4)
 est2
 
 # Test for GARCH(2,1)
@@ -52,12 +71,35 @@ plot(y, type = "l")
 x.arch <- garch(y, order = c(2,1)) # Fit GARCH(2,1)
 est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
 est1
-est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(2,1), dfest = 5)
+est2 <- QMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(2,1), dfest = 5)
 est2
 
 # Finished test for MLE and GARCH with normal innovation.
-# Test tQMLE for GARCH with t
-# Done, with known degree of freedom of t innovation, the tQMLE is better than MLE with normal
+# Test QMLE for GARCH with t
+# Done, with known degree of freedom of t innovation, the QMLE is better than MLE with normal
+
+# Test QMLE for GARCH with Pearson's type IV error
+library(PearsonDS)
+paraPIV <- list(m=4, nu=-2, location=0, scale=1)
+paraPIV
+x.PIV <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 2000, rnd = "rpearsonIV", params.PIV = paraPIV)
+hist(x.PIV$x)
+plot(x.PIV$x, type = 'l')
+
+test.PIV <- rpearsonIV(1000, params=paraPIV)
+hist(test.PIV,probability = TRUE, breaks = 20)
+
+# Quasi-maximum likelihood estimation
+library(tseries)
+x.arch <- garch(x.PIV$x, order = c(1,1)) # Fit GARCH(2,1)
+est1 <- MLE(y = x.PIV$x, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
+est1
+est2 <- QMLE(series = x.PIV$x, LogLFunc = "LogL_GARCH_t", order = c(1,1), dfest = 5)
+est2$QMLE.t
+library(pracma)
+est3 <- QMLE(series = x.PIV$x, LogLFunc = "LogL_GARCH_PIV", order = c(1,1), params.PIV = paraPIV)
+est3$QMLE.PIV
+
 ###########################################################################
 
 ###########################################################################
@@ -129,12 +171,12 @@ newdf
 
 ############# 5. A_tQMLE function writing and testing ###################
 ################################
-xx <- GARCH_t(alpha = c(0.1, 0.3), beta = 0.4, n = 500, rnd = "rt", df.t = 7)
+xx <- GARCH_t(alpha = c(0.1, 0.3), beta = 0.4, n = 1000, rnd = "rt", df.t = 4)
 y <- xx$x
 plot(y, type = "l")
 library(tseries)
 x.arch <- garch(y, order = c(1,1)) 
-est.Norm <- tQMLE(series = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
+est.Norm <- QMLE(series = y, LogLFunc = "LogL_GARCH_Norm", order = c(1,1))
 est.Norm$QMLE.N
 e.norm <- est.Norm$e
 plot(e.norm,type='l')
@@ -144,15 +186,18 @@ Estdf(e.norm)
 est <- A_tQMLE(series = y, order = c(1,1))
 est
 
-est2 <- tQMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 7)
+est2 <- QMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 4)
 est2$QMLE.t
 ############# 6. YITAtQMLE function writing and testing ###################
+# Done!
 ################################
 
 ############# 7. google.intraday.data testing ###################
 library('xts')
-# AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =12)
-# head(AMZN)
+AMZN <- google.intraday.data(symbol = "AMZN", freq = 60, period =12)
+head(AMZN)
+length(AMZN[,1])
+
 # length(AMZN[,1])/(6.5*60)
 # length(AMZN[,1])
 # # AMZN$minute_updown <- AMZN$Close -AMZN$Open
@@ -177,15 +222,6 @@ library('xts')
 # write.csv(AMZN, file = "AMZN.csv") 
 
 # split(AMZN, f = 'days')
-
-################################
-# Get Data function.
-# JPM <- as.xts(get.hist.quote("JPM",start="2000-01-02",
-#                              provider ="yahoo",
-#                              quote=c("Open", "High", "Low", "Close","Volume","AdjClose")))
-# write.csv(JPM,file="Y:/DATA/JPM2013.csv")
-# length(JPM)
-
 ################################
 ################################
 
