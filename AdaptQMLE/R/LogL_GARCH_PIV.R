@@ -34,10 +34,14 @@ LogL_GARCH_PIV <- function(series, p, q, lambda, a, nu, m){
     {
       e <- series / (sqrt(sig2))
       # Here is an issue!!!
-      cmplx <- complex(real = m, imaginary = nu/2)
-      K <- 2^(2*m-2)*abs(gammaz(cmplx))^2/(a*pi*gammaz(2*m-1))
-      f <- K * (1 + ((e - lambda)/a)^2)^(-m) * exp(-nu * atan((e - lambda)/a))
-      return(sum(log(sqrt(sig2))-log(f)))
+      # cmplx <- complex(real = m, imaginary = nu/2)
+      # K <- 2^(2*m-2)*abs(gammaz(cmplx))^2/(a*pi*gammaz(2*m-1))
+      # f <- K * (1 + ((e - lambda)/a)^2)^(-m) * exp(-nu * atan((e - lambda)/a))
+      # return(sum(log(sqrt(sig2))-log(f)))
+      
+      # Perfect! Pay attention: the sqrt(sig2) is the a_t in the K, which is conditional standard deviation.
+      L <- sum(log(sqrt(sig2)) + m * log(1+(e^2)) +nu * atan(e))
+      return(L)
     }
     else return(Inf)
   }
