@@ -33,8 +33,10 @@ LogL_GARCH_PIV <- function(series, p, q, lambda, a, nu, m){
     if (c(alpha,beta) > rep(0,(q+p+1)) && (sum(alpha[2:(q+1)])+sum(beta)) < 1 && sig2>=0)
     {
       e <- series / (sqrt(sig2))
-      K <- 2^(2*m-2)*abs(gammaz(m+nui/2))^2/(a*pi*gammaz(2*m-1))
-      f <- K * (1 + ((e - lambda)/a)^2)^(-m) * exp(-nu * tan((e - lambda)/a)^(-1))
+      # Here is an issue!!!
+      cmplx <- complex(real = m, imaginary = nu/2)
+      K <- 2^(2*m-2)*abs(gammaz(cmplx))^2/(a*pi*gammaz(2*m-1))
+      f <- K * (1 + ((e - lambda)/a)^2)^(-m) * exp(-nu * atan((e - lambda)/a))
       return(sum(log(sqrt(sig2))-log(f)))
     }
     else return(Inf)

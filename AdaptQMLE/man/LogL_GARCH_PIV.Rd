@@ -2,9 +2,9 @@
 % Please edit documentation in R/LogL_GARCH_PIV.R
 \name{LogL_GARCH_PIV}
 \alias{LogL_GARCH_PIV}
-\title{log-likelihood function of GARCH(p,q) with Pearson's Type IV (PIV) distribution}
+\title{log-likelihood function of GARCH(p,q) with PIV distribution}
 \usage{
-LogL_GARCH_PIV(series, p, q, df)
+LogL_GARCH_PIV(series, p, q, lambda, a, nu, m)
 }
 \arguments{
 \item{series}{The time series that need to be fitted.}
@@ -13,7 +13,17 @@ LogL_GARCH_PIV(series, p, q, df)
 
 \item{q}{The order of ARCH terms \eqn{\epsilon^2}}
 
-\item{df}{The specified degree of freedome of student's t innovation.}
+\item{lambda}{\eqn{\lambda} is the location parameter of Pearson's Type IV distribution}
+
+\item{a}{\eqn{a} is the scale parameters of PIV distribution with condition \eqn{a > 0}}
+
+\item{nu}{\eqn{\nu} parameter of PIV distribution. \eqn{\nu} is related to the
+asymmetry of the distribution, and a positive (or negative) \eqn{\nu} stands 
+for a negatively (or positively) skewed distribution}
+
+\item{m}{The \eqn{m} parameter of PIV distribution with condition \eqn{m > 1/2}. m 
+captures the leptokurtosis of the distribution, and a smaller value of m represents 
+a heavier tail of the distribution}
 }
 \value{
 Log-Likelihood function of GARCH with t error
