@@ -78,11 +78,12 @@ est2
 # Test QMLE for GARCH with t
 # Done, with known degree of freedom of t innovation, the QMLE is better than MLE with normal
 
+#############################################
 # Test QMLE for GARCH with Pearson's type IV error
 library(PearsonDS)
-paraPIV <- list(m=4, nu=-2, location=0, scale=1)
+paraPIV <- list(m=2, nu=-2, location=0, scale=1)
 paraPIV
-x.PIV <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 2000, rnd = "rpearsonIV", params.PIV = paraPIV)
+x.PIV <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rpearsonIV", params.PIV = paraPIV)
 hist(x.PIV$x)
 plot(x.PIV$x, type = 'l')
 
@@ -99,6 +100,12 @@ est2$QMLE.t
 library(pracma)
 est3 <- QMLE(series = x.PIV$x, LogLFunc = "LogL_GARCH_PIV", order = c(1,1), params.PIV = paraPIV)
 est3$QMLE.PIV
+# For more samples, PIV works pretty good. 
+est <- A_tQMLE(series = y, order = c(1,1))
+est
+library(timeDate)
+kurtosis(test.PIV)
+kurtosis(rt(5000, df = 3.59))
 
 ###########################################################################
 

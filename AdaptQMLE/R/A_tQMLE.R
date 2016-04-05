@@ -22,7 +22,7 @@ A_tQMLE <- function(series, order = c(1,1)){
   Bdf.t <- c()
   # Estm contains parameters, est.df, ETA and SSE(total sum square error)
   Estm <- matrix(NA, max.iter, (p+q+1+3))
-  Est.model <- tQMLE(series=series, LogLFunc = "LogL_GARCH_Norm", order = order)
+  Est.model <- QMLE(series=series, LogLFunc = "LogL_GARCH_Norm", order = order)
   para <- Est.model$QMLE.N
   e.t <- Est.model$e
   Estm <- c(Est.model$QMLE.N, NA, NA, NA)
@@ -33,7 +33,7 @@ A_tQMLE <- function(series, order = c(1,1)){
   iter <-  1; diff <- 1
   while (iter<max.iter & diff > 0.0000001) {
     iter <-  iter+1
-    Est.model <- tQMLE(series = series, LogLFunc = "LogL_GARCH_t", order = order, dfest = new.df)
+    Est.model <- QMLE(series = series, LogLFunc = "LogL_GARCH_t", order = order, dfest = new.df)
     e.t <- Est.model$e
     new.para <- Est.model$QMLE.t
     new.diff <- sum((para-new.para)^2)/(p+q+1)
