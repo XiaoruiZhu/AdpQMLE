@@ -24,10 +24,10 @@
 #' # Two bad estimation methods
 #' library(tseries)
 #' x.arch <- garch(y, order = c(2,1)) # Fit GARCH(2,1)
-#' est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
+#' est1 <- MLE(y = y, LogLFunc = "LogL_GARCH_Norm", order = c(2,1))
 #' est1
 #' # Better estimation methods with specified innovation.
-#' est2 <- QMLE(series = y, LogLFunc = LogL_GARCH_t, dfest = 4)
+#' est2 <- QMLE(series = y, LogLFunc = "LogL_GARCH_t", dfest = 4)
 #' est2
 QMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t", "LogL_GARCH_PIV"), order = c(1,1), dfest, params.PIV){
   # sig2 in the formula is the sig^2!!!!!!!!!!!!!!pay attention.

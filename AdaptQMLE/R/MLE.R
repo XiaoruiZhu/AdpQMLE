@@ -19,7 +19,7 @@
 #' plot(y, type = "l")
 #' # Estimate parameters using "garch" function in the "tseries" package
 #' x.arch <- garch(y, order = c(1,1))
-#' est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
+#' est1 <- MLE(y = y, LogLFunc = "LogL_GARCH_Norm", order = c(1,1))
 #' est1
 #'
 #' # Example for single linear regression model.
@@ -39,7 +39,6 @@
 #' myMLE <- MLE(y, X, LogLFunc = "LogL_Linear_Norm")
 #' myMLE
 #' # Very good example for single linear regression by suing "MLE" function.
-
 
 MLE <- function(y, X, LogLFunc = c("LogL_GARCH_Norm", "LogL_Linear_Norm"), order = c(1,1)){
   ## normal distribution innovation likelihood

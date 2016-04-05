@@ -14,7 +14,7 @@
 Estdf <- function(e){
   n <- length(e)
   like <- function(e){
-    yitatL <- function(par){
+    df.tL <- function(par){
       df <- par[1]
       #tQMLE.e=e/yi
       yi <- 1
@@ -26,8 +26,8 @@ Estdf <- function(e){
       }
       else Inf
     }
-    yitatL
+    df.tL
   }
-  yitqmle <- nlminb(c(0.01),like(e),lower=c(0),upper=Inf)
-  return(yitqmle$par)
+  df.qmle <- nlminb(c(0.01),like(e),lower=c(0),upper=Inf)
+  return(round(df.qmle$par))
 }
