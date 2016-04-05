@@ -35,7 +35,11 @@ QMLE <- function(series, LogLFunc = c("LogL_GARCH_Norm", "LogL_GARCH_t", "LogL_G
     stop("No input data for 'series'!")
   }
   q <- order[1]; p <- order[2]
-  if (missing(LogLFunc)) {
+  if (!missing(LogLFunc)) 
+    LogLFunc <- match.arg(LogLFunc)
+  else LogLFunc <- "LogL_GARCH_Norm"
+  
+  if (LogLFunc == "LogL_GARCH_Norm") {
     # || (missing(dfest)) || (missing(params.PIV))) 
     LogLFunc <- LogL_GARCH_Norm
     QMLE.N <- MLE(y = series, LogLFunc(series), order = order)$MLE.N

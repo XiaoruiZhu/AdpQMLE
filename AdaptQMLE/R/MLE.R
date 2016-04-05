@@ -43,6 +43,10 @@
 
 MLE <- function(y, X, LogLFunc = c("LogL_GARCH_Norm", "LogL_Linear_Norm"), order = c(1,1)){
   ## normal distribution innovation likelihood
+  if (!missing(LogLFunc)) 
+    LogLFunc <- match.arg(LogLFunc)
+  else LogLFunc <- "LogL_GARCH_Norm"
+  
   if (missing(X) || LogLFunc == "LogL_GARCH_Norm"){
     LogLFunc <- LogL_GARCH_Norm
     q <- order[1]; p <- order[2]
