@@ -8,7 +8,7 @@ Maintainer: Xiaorui(Jeremy) Zhu <zhuxiaorui1989@gmail.com>
 Depends:
     R (>= 3.0.1), utils, xts
 Imports:
-    zoo, tseries
+    zoo, tseries, PearsonDS, pracma
 Description: Includes all related function of Adaptive Quasi-Maximum Likelihood Estimation
     method. It is not only for GARCH model with normal distributed innovation, but also for
     models with student's t innovation, Pearson's type IV innovation and so on.
