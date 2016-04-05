@@ -28,17 +28,17 @@ A_tQMLE <- function(series, order = c(1,1)){
   Estm <- c(Est.model$QMLE.N, NA, NA, NA)
   names(Estm) <- c("alpha0", "alpha1", "beta","est.df", "eta", "diff_Para")
   # The scale parameter eta_f is the boundary. Equal to 1 is the condition.
-  new.df <- Estdf(e.t)
+  old.df <- 100; new.df <- Estdf(e.t)
   new.YITA <- YITAtQMLE(e=e.t,dfest=new.df)
   iter <-  1; diff <- 1
-  while (iter<max.iter & diff > 0.0000001) {
+  while ((iter<max.iter) & (new.df != old.df)) {
     iter <-  iter+1
     Est.model <- QMLE(series = series, LogLFunc = "LogL_GARCH_t", order = order, dfest = new.df)
     e.t <- Est.model$e
     new.para <- Est.model$QMLE.t
     new.diff <- sum((para-new.para)^2)/(p+q+1)
     Estm <- rbind(Estm, c(Est.model$QMLE.t, new.df, new.YITA, new.diff))
-    new.df <- Estdf(e.t)
+    old.df <- new.df; new.df <- Estdf(e.t)
     new.YITA <- YITAtQMLE(e=e.t,dfest=new.df) # This is the crux! Using the assumed df to estimate yita!
     diff <- new.diff; para <- new.para
   }
