@@ -194,6 +194,10 @@ newdf
 
 
 ############# 5. A_tQMLE function writing and testing ###################
+# Need to change the A_tQMLE function so that this function can optimize $\theta$ 
+# and degree of freedom simultateously. Think over the "Collaborative Flitering Algothrim" 
+# in the Machine Learning course.
+
 ################################
 xx <- GARCH_t(alpha = c(0.1, 0.3), beta = 0.4, n = 1000, rnd = "rt", df.t = 4)
 y <- xx$x
