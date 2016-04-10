@@ -4,9 +4,10 @@
 #'
 #' @title Estimation of degree freedom \eqn{d_f} using tQMLE
 #'
-#' @param e The innovation caculated by estimate parameters
+#' @param e residuals that were caculated by estimate parameters
 #'
-#' @return Return value is the estimator of degree of freedom when the \eqn{\eta_{f} = 1}, which means the asymptotic distribution of sample residues.
+#' @return Return value is the estimator of degree of freedom when the \eqn{\eta_{f} = 1}, which 
+#'          means the asymptotic distribution of sample residues.
 #' @export
 #'
 #' @examples
