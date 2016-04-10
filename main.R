@@ -51,28 +51,32 @@ est3$QMLE.N
 # This is too bad.
 
 # Test for GARCH(1,1) with t innovation #
-xx <- GARCH_t(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
+xx <- GARCH_Gene(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4)
 y <- xx$x
 plot(y, type = "l")
-
+library(tseries)
 x.arch <- garch(y, order = c(1,1)) 
+x.arch
 est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
 est1
+est2 <- QMLE(series = y, LogLFunc = "LogL_GARCH_Norm", order = c(1,1))
+est2$QMLE.N
 
-est2 <- QMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(1,1), dfest = 4)
-est2
+est3 <- QMLE(series = y, LogLFunc = "LogL_GARCH_t", order = c(1,1), dfest = 4)
+est3$QMLE.t
 
 # Test for GARCH(2,1)
-xx <- GARCH_t(alpha = c(0.1, 0.1, 0.1), beta = 0.5, n = 1000, rnd = "rt", df.t = 5)
-y <- xx$x
+xx <- GARCH_Gene(alpha = c(0.1, 0.1, 0.1), beta = 0.5, n = 1000, rnd = "rt", df.t = 5)
+y2 <- xx$x
 
-plot(y, type = "l")
+plot(y2, type = "l")
 
-x.arch <- garch(y, order = c(2,1)) # Fit GARCH(2,1)
-est1 <- MLE(y = y, LogLFunc = LogL_GARCH_Norm, order = c(2,1))
+x.arch <- garch(y2, order = c(2,1)) # Fit GARCH(2,1)
+x.arch
+est1 <- MLE(y = y2, LogLFunc = "LogL_GARCH_Norm", order = c(2,1))
 est1
-est2 <- QMLE(series = y, LogLFunc = LogL_GARCH_t, order = c(2,1), dfest = 5)
-est2
+est2 <- QMLE(series = y2, LogLFunc = "LogL_GARCH_t", order = c(2,1), dfest = 5)
+est2$QMLE.t
 
 # Finished test for MLE and GARCH with normal innovation.
 # Test QMLE for GARCH with t
@@ -93,7 +97,8 @@ hist(test.PIV,probability = TRUE, breaks = 20)
 # Quasi-maximum likelihood estimation
 library(tseries)
 x.arch <- garch(x.PIV$x, order = c(1,1)) # Fit GARCH(2,1)
-est1 <- MLE(y = x.PIV$x, LogLFunc = LogL_GARCH_Norm, order = c(1,1))
+x.arch
+est1 <- MLE(y = x.PIV$x, LogLFunc = "LogL_GARCH_Norm", order = c(1,1))
 est1
 est2 <- QMLE(series = x.PIV$x, LogLFunc = "LogL_GARCH_t", order = c(1,1), dfest = 5)
 est2$QMLE.t
@@ -101,38 +106,51 @@ library(pracma)
 est3 <- QMLE(series = x.PIV$x, LogLFunc = "LogL_GARCH_PIV", order = c(1,1), params.PIV = paraPIV)
 est3$QMLE.PIV
 # For more samples, PIV works pretty good. 
-est <- A_tQMLE(series = y, order = c(1,1))
+est <- A_tQMLE(series = x.PIV$x, order = c(1,1))
 est
 library(timeDate)
 kurtosis(test.PIV)
 kurtosis(rt(5000, df = 3.59))
 
 ###########################################################################
-
+# Simulation part 1.
 ###########################################################################
-# 3. Creating MLE for linear regression and test #####
+# Assumptions:
+ini.alpha <- c(0.1, 0.2); ini.beta <- 0.3; ini.n <- 2000; ini.df.t <- 5
 
-# Fix x values for all runs of the simulation; draw from an exponential
-n <- 2000 # So we don't have magic #s floating around
-beta.0 <- 5
-beta.1 <- -2
-sigma.sq <- 1
-fixed.x <- rexp(n=n)
-# Simulate from the model Y=\beta_0+\beta_1*x+N(0,\sigma^2)
-# Inputs: intercept; slope; variance; vector of x; return sample or estimated
-data <- gen.lin(intercept=beta.0, slope = beta.1, noise.variance=sigma.sq, x=fixed.x, dis.error = "rt", dft=3)
-par(mfrow=c(1,1))
-hist(fixed.x, freq = FALSE, breaks = 50, xlab = expression(x[i]), main = "")
-hist(data$y, freq = FALSE, breaks = 50, xlab = expression(y[i]), main = "")
-plot(data$x, data$y)
-test <- lm(data$y~data$x)
-test
-y <- as.matrix(data$y); X <- as.matrix(data$x)
-myMLE <- MLE(y, X, LogLFunc = "LogL_Linear_Norm")
-myMLE
-# Very good example for single linear regression by suing "MLE" function.
-
+xx <- GARCH_Gene(alpha = ini.alpha, beta = ini.beta, n = ini.n, rnd = "rt", df.t = ini.df.t)
+y <- xx$x
+plot(y, type = "l")
+testest <- QMLE(series = y, LogLFunc = "LogL_GARCH_t", order = c(1,1), dfest = ini.df.t)
+testest$QMLE.t
+Sim.A <- A_tQMLE(series = y, order = c(1,1))
+Sim.A
+l <- nrow(Sim.A)
+sq.diff <- (Sim.A[, 1:3] - matrix(c(ini.alpha, ini.beta), l, 3, byrow = TRUE))^2
+RMSD <- apply(sq.diff, 1, sum)
+RMSD
 # 
+irat <- length(Sim.A[,"est.df"])
+est.df <- Sim.A[,"est.df"]
+d <- data.frame(No = seq(1:length(RMSD)), 
+                df = c(est.df[1:irat], rep(est.df[irat], l-irat)),
+                RMSD = RMSD)
+min.df <- est.df[irat]; max.df <- est.df[2]
+
+par(mar = c(5,5,2,5))
+with(d, plot(No, df, type= 'l',lty=1, col="blue",  
+             ylab=expression(df),
+             ylim=c(ini.df.t,max.df)))
+par(new = T)
+abline(h=ini.df.t,col="red",lty=3)
+par(new = T)
+with(d, plot(No, RMSD, type='l', lty=2, axes=F, xlab=NA, ylab=NA, cex=1.2))
+axis(side = 4)
+mtext(side = 4, line = 3, 'RMSD')
+legend("topright",
+       legend=c("df", "RMSD", "Real df"), cex = 0.8,
+       lty=c(1,2,3), col=c("blue", "black", "red"))
+
 # par(mfrow=c(2,1))
 # slope.sample <- replicate(1e4, coefficients(sim.lin.gauss(model=TRUE))["x"])
 # hist(slope.sample,freq=FALSE,breaks=50,xlab=expression(hat(beta)[1]),main="")
@@ -147,7 +165,6 @@ myMLE
 #####################################################
 
 ############# 3. com.residue function writing and testing ###################
-## # 计算MLE得出的残差e.t，这个是需要来寻找最优f的参数的，yita=1作为边界！
 n <- 1000; df <- 4
 teste.t <- rt(n,df)
 library(timeDate)
