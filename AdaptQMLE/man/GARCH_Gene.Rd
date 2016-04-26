@@ -41,7 +41,8 @@ xx <- GARCH_Gene(alpha = c(0.1, 0.4), beta = 0.4, n = 2000, rnd = "rt", df.t = 4
 y <- xx$x
 plot(y, type = "l")
 paraPIV <- list(m=2, nu=-2, location=0, scale=1)
-x.PIV <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rpearsonIV", params.PIV = paraPIV)
+x.PIV <- GARCH_Gene(alpha = c(0.1, 0.2), beta = 0.5, n = 1000, rnd = "rpearsonIV", 
+                    params.PIV = paraPIV)
 \dontrun{hist(x.PIV$x)}
 \dontrun{plot(x.PIV$x, type = 'l')}
 }

@@ -7,10 +7,11 @@
 Estdf(e)
 }
 \arguments{
-\item{e}{The innovation caculated by estimate parameters}
+\item{e}{residuals that were caculated by estimate parameters}
 }
 \value{
-Return value is the estimator of degree of freedom when the \eqn{\eta_{f} = 1}, which means the asymptotic distribution of sample residues.
+Return value is the estimator of degree of freedom when the \eqn{\eta_{f} = 1}, which 
+         means the asymptotic distribution of sample residues.
 }
 \description{
 This function is the crux of whole adptive quasi maximum likelihood estimation.

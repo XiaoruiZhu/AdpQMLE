@@ -28,7 +28,8 @@
 #' # Fix x values for all runs of the simulation; draw from an exponential
 #' n <- 2000 # So we don't have magic #s floating around
 #' beta.0 <- 5; beta.1 <- -2; sigma.sq <- 1; fixed.x <- rexp(n=n)
-#' data <- gen.lin(intercept=beta.0, slope = beta.1, noise.variance=sigma.sq, x=fixed.x, dis.error = "rt", dft=3)
+#' data <- gen.lin(intercept=beta.0, slope = beta.1, noise.variance=sigma.sq, 
+#'                  x=fixed.x, dis.error = "rt", dft=3)
 #' par(mfrow=c(1,1))
 #' hist(fixed.x, freq = FALSE, breaks = 50, xlab = expression(x[i]), main = "")
 #' hist(data$y, freq = FALSE, breaks = 50, xlab = expression(y[i]), main = "")

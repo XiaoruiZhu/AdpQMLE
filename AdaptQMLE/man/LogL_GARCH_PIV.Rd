@@ -9,9 +9,9 @@ LogL_GARCH_PIV(series, p, q, lambda, a, nu, m)
 \arguments{
 \item{series}{The time series that need to be fitted.}
 
-\item{p}{The order of GARCH terms \eqn{\sigma^2}}
+\item{p}{order of GARCH terms \eqn{\sigma^2}}
 
-\item{q}{The order of ARCH terms \eqn{\epsilon^2}}
+\item{q}{order of ARCH terms \eqn{\epsilon^2}}
 
 \item{lambda}{\eqn{\lambda} is the location parameter of Pearson's Type IV distribution}
 
@@ -21,7 +21,7 @@ LogL_GARCH_PIV(series, p, q, lambda, a, nu, m)
 asymmetry of the distribution, and a positive (or negative) \eqn{\nu} stands 
 for a negatively (or positively) skewed distribution}
 
-\item{m}{The \eqn{m} parameter of PIV distribution with condition \eqn{m > 1/2}. m 
+\item{m}{\eqn{m} parameter of PIV distribution with condition \eqn{m > 1/2}. m 
 captures the leptokurtosis of the distribution, and a smaller value of m represents 
 a heavier tail of the distribution}
 }
@@ -29,6 +29,11 @@ a heavier tail of the distribution}
 Log-Likelihood function of GARCH with t error
 }
 \description{
-The Log-likelihood function of GARCH model with Pearson's Type IV (PIV) distributed error
+Return Log-likelihood function of GARCH model with Pearson's Type IV (PIV) distributed error
+}
+\references{
+Zhu, K., & Li, W. K. (2015). A new Pearson-type QMLE for conditionally 
+             heteroscedastic models. Journal of Business & Economic Statistics, 33(4), 
+             552-565. \url{https://mpra.ub.uni-muenchen.de/52732/1/MPRA_paper_52732.pdf}
 }
 
