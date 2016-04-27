@@ -116,7 +116,7 @@ kurtosis(rt(5000, df = 3.59))
 # Simulation part 1.
 ###########################################################################
 # Assumptions:
-ini.alpha <- c(0.1, 0.2); ini.beta <- 0.3; ini.n <- 2000; ini.df.t <- 5
+ini.alpha <- c(0.1, 0.2); ini.beta <- 0.5; ini.n <- 5000; ini.df.t <- 7
 
 xx <- GARCH_Gene(alpha = ini.alpha, beta = ini.beta, n = ini.n, rnd = "rt", df.t = ini.df.t)
 y <- xx$x
@@ -132,24 +132,35 @@ RMSD
 # 
 irat <- length(Sim.A[,"est.df"])
 est.df <- Sim.A[,"est.df"]
-d <- data.frame(No = seq(1:length(RMSD)), 
+
+d <- data.frame(Step = seq(1:length(RMSD)), 
                 df = c(est.df[1:irat], rep(est.df[irat], l-irat)),
                 RMSD = RMSD)
 min.df <- est.df[irat]; max.df <- est.df[2]
 
 par(mar = c(5,5,2,5))
-with(d, plot(No, df, type= 'l',lty=1, col="blue",  
+with(d, plot(Step, df, type= 'l',lty=1, lwd = 2, col="blue",  
              ylab=expression(df),
              ylim=c(ini.df.t,max.df)))
 par(new = T)
-abline(h=ini.df.t,col="red",lty=3)
+abline(h=ini.df.t,col="red",lty=3, lwd = 2)
 par(new = T)
-with(d, plot(No, RMSD, type='l', lty=2, axes=F, xlab=NA, ylab=NA, cex=1.2))
+with(d, plot(Step, RMSD, type='l', lty=2, lwd = 2, axes=F, xlab=NA, ylab=NA, ylim=c(min(RMSD), max(RMSD)), cex=1.2))
 axis(side = 4)
 mtext(side = 4, line = 3, 'RMSD')
-legend("topright",
+title_exp <- substitute(paste(hat(theta), " = (", a1, ",", a2, ",", b,
+                    "), n=", n, ", df=", df), list(a1=ini.alpha[1],a2=ini.alpha[2], 
+                                                             b = ini.beta, n=ini.n, df= ini.df.t))
+                    
+title_exp
+title(main = title_exp)
+legend("topright", text.width = 0.5,
        legend=c("df", "RMSD", "Real df"), cex = 0.8,
-       lty=c(1,2,3), col=c("blue", "black", "red"))
+       lty=c(1,2,3), col=c("blue", "black", "red")
+       )
+
+# var=10
+# plot(1:5, runif(5, 1, 4), main=substitute(paste("here ", lambda[1], "=", v, " and ", epsilon^2, "=", b, "!"), list(v=var, b=var^2)))
 
 # par(mfrow=c(2,1))
 # slope.sample <- replicate(1e4, coefficients(sim.lin.gauss(model=TRUE))["x"])
